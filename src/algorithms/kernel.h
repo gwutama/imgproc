@@ -12,7 +12,9 @@ public:
         BoxBlur,
         Sharpen,
         EdgeDetection,
-        GaussianBlur5x5
+        GaussianBlur5x5,
+        LineDetectHorizontal,
+        LineDetectVertical,
     };
 
     explicit Kernel(KernelType kernel);
