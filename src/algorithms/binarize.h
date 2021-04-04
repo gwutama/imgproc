@@ -1,8 +1,8 @@
 #pragma once
 
-#include "algorithmbase.h"
+#include "algorithm.h"
 
-class GsBinarize final: public AlgorithmBase
+class Binarize final: public Algorithm
 {
 public:
     void setThreshold(int threshold)
@@ -10,7 +10,7 @@ public:
         mThreshold = threshold;
     }
 
-    void apply(std::shared_ptr<GsImageAdapterBase> &image) override;
+    void apply8bit(std::shared_ptr<Image> &image) override;
 
 private:
     int mThreshold = 0;

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "algorithmbase.h"
+#include "algorithm.h"
 
-class GsRotate final: public AlgorithmBase
+class Rotate final: public Algorithm
 {
 public:
     enum class Direction
@@ -18,7 +18,7 @@ public:
         mDirection = direction;
     }
 
-    void apply(std::shared_ptr<GsImageAdapterBase> &image) override;
+    void apply8bit(std::shared_ptr<Image> &image) override;
 
 private:
     double directionToRadian(Direction direction);

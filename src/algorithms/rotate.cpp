@@ -1,7 +1,7 @@
-#include "gsrotate.h"
+#include "rotate.h"
 #include <algorithm>
 
-void GsRotate::apply(std::shared_ptr<GsImageAdapterBase> &image)
+void Rotate::apply8bit(std::shared_ptr<Image> &image)
 {
     auto res = image->resolution();
     auto h = res.height;
@@ -30,7 +30,7 @@ void GsRotate::apply(std::shared_ptr<GsImageAdapterBase> &image)
     }
 }
 
-double GsRotate::directionToRadian(Direction direction)
+double Rotate::directionToRadian(Direction direction)
 {
     auto degree = 0.0;
 

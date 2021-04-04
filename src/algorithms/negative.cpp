@@ -1,6 +1,6 @@
-#include "uninegative.h"
+#include "negative.h"
 
-void UniNegative::apply(std::shared_ptr<GsImageAdapterBase> &image)
+void Negative::apply8bit(std::shared_ptr<Image> &image)
 {
     auto size = image->pixelData()->size();
 

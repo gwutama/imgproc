@@ -1,23 +1,21 @@
 set(HEADER_FILES
         bitmap/bitmaptypes.h
-        algorithms/algorithmbase.h
+        algorithms/algorithm.h
 )
 
 set(SOURCE_FILES
         common.cpp
-        imageprocessor.cpp
-        gsimageadapterbase.cpp
+        image.cpp
         bitmap/bitmapfile.cpp
-        bitmap/bitmapimageadapter.cpp
-        algorithms/gsbinarize.cpp
-        algorithms/gshistogram.cpp
-        algorithms/gshistogramequalization.cpp
-        algorithms/gsrotate.cpp
-        algorithms/gskernelfilter.cpp
+        algorithms/binarize.cpp
+        algorithms/histogram.cpp
+        algorithms/histogramequalization.cpp
+        algorithms/rotate.cpp
+        algorithms/kernelfilter.cpp
         algorithms/kernel.cpp
         algorithms/gsfilterwindow.cpp
-        algorithms/unibrightnessadjustment.cpp
-        algorithms/uninegative.cpp
+        algorithms/brightnessadjustment.cpp
+        algorithms/negative.cpp
 )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

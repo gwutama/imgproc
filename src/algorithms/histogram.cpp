@@ -1,8 +1,8 @@
-#include "gshistogram.h"
+#include "histogram.h"
 #include <fstream>
 #include <iostream>
 
-void GsHistogram::apply(std::shared_ptr<GsImageAdapterBase> &image)
+void Histogram::apply8bit(std::shared_ptr<Image> &image)
 {
     std::vector<float> px;
     px.resize(256);
@@ -24,7 +24,7 @@ void GsHistogram::apply(std::shared_ptr<GsImageAdapterBase> &image)
     mHistogramBin = px;
 }
 
-bool GsHistogram::write(const std::string &filePath)
+bool Histogram::write(const std::string &filePath)
 {
     std::ofstream ofs(filePath, std::ofstream::out);
 

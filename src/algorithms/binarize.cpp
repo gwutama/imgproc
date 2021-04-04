@@ -1,6 +1,6 @@
-#include "gsbinarize.h"
+#include "binarize.h"
 
-void GsBinarize::apply(std::shared_ptr<GsImageAdapterBase> &image)
+void Binarize::apply8bit(std::shared_ptr<Image> &image)
 {
     auto size = image->pixelData()->size();
 

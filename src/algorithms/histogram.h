@@ -1,12 +1,12 @@
 #pragma once
 
-#include "algorithmbase.h"
+#include "algorithm.h"
 #include <vector>
 
-class GsHistogram final: public AlgorithmBase
+class Histogram final: public Algorithm
 {
 public:
-    void apply(std::shared_ptr<GsImageAdapterBase> &image) override;
+    void apply8bit(std::shared_ptr<Image> &image) override;
 
     const std::vector<float> &getHistogramBin() const
     {

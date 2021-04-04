@@ -1,6 +1,6 @@
-#include "unibrightnessadjustment.h"
+#include "brightnessadjustment.h"
 
-void UniBrightnessAdjustment::apply(std::shared_ptr<GsImageAdapterBase> &image)
+void BrightnessAdjustment::apply8bit(std::shared_ptr<Image> &image)
 {
     auto size = image->pixelData()->size();
 

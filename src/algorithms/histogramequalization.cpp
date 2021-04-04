@@ -1,9 +1,9 @@
-#include "gshistogramequalization.h"
+#include "histogramequalization.h"
 #include <fstream>
 #include <iostream>
 #include <cmath>
 
-void GsHistogramEqualization::apply(std::shared_ptr<GsImageAdapterBase> &image)
+void HistogramEqualization::apply8bit(std::shared_ptr<Image> &image)
 {
     // https://en.wikipedia.org/wiki/Histogram_equalization
     // 1. calculate px(i)

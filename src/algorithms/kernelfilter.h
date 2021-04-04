@@ -1,9 +1,9 @@
 #pragma once
 
-#include "algorithmbase.h"
+#include "algorithm.h"
 #include "kernel.h"
 
-class GsKernelFilter final: public AlgorithmBase
+class KernelFilter final: public Algorithm
 {
 public:
     void setKernelType(Kernel::KernelType kernelType)
@@ -11,7 +11,7 @@ public:
         mKernelType = kernelType;
     }
 
-    void apply(std::shared_ptr<GsImageAdapterBase> &image) override;
+    void apply8bit(std::shared_ptr<Image> &image) override;
 
 private:
     Kernel::KernelType mKernelType;

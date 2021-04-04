@@ -1,6 +1,6 @@
-#include "gskernelfilter.h"
+#include "kernelfilter.h"
 
-void GsKernelFilter::apply(std::shared_ptr<GsImageAdapterBase> &image)
+void KernelFilter::apply8bit(std::shared_ptr<Image> &image)
 {
     if (mKernelType == Kernel::KernelType::Unknown) {
         return;
