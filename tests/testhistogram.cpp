@@ -17,10 +17,11 @@ TEST(TestHistogram, man_bmp)
            "set output '/tmp/out.png'; "
            "plot '/tmp/out.dat' with impulse;\"");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "/tmp/out.png ../../tests/images/man.bmp +append "
-           "testhistogram-man_bmp.png");
+           "../results/testhistogram-man_bmp.png");
 }
 
 int main(int argc, char **argv)

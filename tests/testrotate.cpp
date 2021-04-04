@@ -11,10 +11,11 @@ TEST(TestRotate, lena_bmp_180)
     image->applyAlgorithm(rotate);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/lena.bmp /tmp/out.bmp +append "
-           "testrotate-lena_bmp-180.png");
+           "../results/testrotate-lena_bmp-180.png");
 }
 
 TEST(TestRotate, cameraman_bmp_180)
@@ -26,10 +27,11 @@ TEST(TestRotate, cameraman_bmp_180)
     image->applyAlgorithm(rotate);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/cameraman.bmp /tmp/out.bmp +append "
-           "testrotate-cameraman_bmp-180.png");
+           "../results/testrotate-cameraman_bmp-180.png");
 }
 
 TEST(TestRotate, lena_bmp_90cw)
@@ -41,10 +43,11 @@ TEST(TestRotate, lena_bmp_90cw)
     image->applyAlgorithm(rotate);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/lena.bmp /tmp/out.bmp +append "
-           "testrotate-lena_bmp-90cw.png");
+           "../results/testrotate-lena_bmp-90cw.png");
 }
 
 TEST(TestRotate, man_bmp_90ccw)
@@ -56,10 +59,11 @@ TEST(TestRotate, man_bmp_90ccw)
     image->applyAlgorithm(rotate);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/man.bmp /tmp/out.bmp +append "
-           "testrotate-man_bmp-90ccw.png");
+           "../results/testrotate-man_bmp-90ccw.png");
 }
 
 int main(int argc, char **argv)

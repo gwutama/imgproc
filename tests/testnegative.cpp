@@ -10,10 +10,11 @@ TEST(TestNegative, man_bmp)
     image->applyAlgorithm(negativeFilter);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/man.bmp /tmp/out.bmp +append "
-           "testnegative-man_bmp.png");
+           "../results/testnegative-man_bmp.png");
 }
 
 int main(int argc, char **argv)

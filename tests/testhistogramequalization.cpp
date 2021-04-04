@@ -28,10 +28,11 @@ TEST(TestHistogramEqualization, man_bmp)
            "plot '/tmp/out_mod.dat' with impulse; "
            "unset multiplot\"");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "/tmp/out.png ../../tests/images/man.bmp /tmp/out.bmp +append "
-           "testhistogramequalization-man_bmp.png");
+           "../results/testhistogramequalization-man_bmp.png");
 }
 
 TEST(TestHistogramEqualization, girlface_bmp)
@@ -59,10 +60,11 @@ TEST(TestHistogramEqualization, girlface_bmp)
            "plot '/tmp/out_mod.dat' with impulse; "
            "unset multiplot\"");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "/tmp/out.png ../../tests/images/girlface.bmp /tmp/out.bmp +append "
-           "testhistogramequalization-girlface.png");
+           "../results/testhistogramequalization-girlface.png");
 }
 
 TEST(TestHistogramEqualization, lena_bmp)
@@ -90,10 +92,11 @@ TEST(TestHistogramEqualization, lena_bmp)
            "plot '/tmp/out_mod.dat' with impulse; "
            "unset multiplot\"");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "/tmp/out.png ../../tests/images/lena.bmp /tmp/out.bmp +append "
-           "testhistogramequalization-lena.png");
+           "../results/testhistogramequalization-lena.png");
 }
 
 int main(int argc, char **argv)

@@ -11,10 +11,11 @@ TEST(TestBrightnessAdjustment, man_bmp_up)
     image->applyAlgorithm(brightness);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/man.bmp /tmp/out.bmp +append "
-           "testbrightnessadjustment-man_bmp_up-100.png");
+           "../results/testbrightnessadjustment-man_bmp_up-100.png");
 }
 
 TEST(TestBrightnessAdjustment, man_bmp_down)
@@ -26,10 +27,11 @@ TEST(TestBrightnessAdjustment, man_bmp_down)
     image->applyAlgorithm(brightness);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/man.bmp /tmp/out.bmp +append "
-           "testbrightnessadjustment-man_bmp_down-100.png");
+           "../results/testbrightnessadjustment-man_bmp_down-100.png");
 }
 
 int main(int argc, char **argv)

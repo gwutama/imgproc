@@ -11,10 +11,11 @@ TEST(TestKernelFilter, man_bmp_boxblur)
     image->applyAlgorithm(kernelFilter);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/man.bmp /tmp/out.bmp +append "
-           "testkernelfilter-man_bmp-boxblur.png");
+           "../results/testkernelfilter-man_bmp-boxblur.png");
 }
 
 TEST(TestKernelFilter, lena_bmp_sharpen)
@@ -26,10 +27,11 @@ TEST(TestKernelFilter, lena_bmp_sharpen)
     image->applyAlgorithm(kernelFilter);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/lena.bmp /tmp/out.bmp +append "
-           "testkernelfilter-lena_bmp-sharpen.png");
+           "../results/testkernelfilter-lena_bmp-sharpen.png");
 }
 
 TEST(TestKernelFilter, girlface_bmp_edgedetection)
@@ -41,10 +43,11 @@ TEST(TestKernelFilter, girlface_bmp_edgedetection)
     image->applyAlgorithm(kernelFilter);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/girlface.bmp /tmp/out.bmp +append "
-           "testkernelfilter-girlface_bmp-edgedetection.png");
+           "../results/testkernelfilter-girlface_bmp-edgedetection.png");
 }
 
 TEST(TestKernelFilter, man_bmp_gaussianblur5x5)
@@ -56,10 +59,11 @@ TEST(TestKernelFilter, man_bmp_gaussianblur5x5)
     image->applyAlgorithm(kernelFilter);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/man.bmp /tmp/out.bmp +append "
-           "testkernelfilter-man_bmp-gaussianblur5x5.png");
+           "../results/testkernelfilter-man_bmp-gaussianblur5x5.png");
 }
 
 int main(int argc, char **argv)

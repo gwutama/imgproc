@@ -11,10 +11,11 @@ TEST(TestBinarize, man_bmp)
     image->applyAlgorithm(binarize);
     image->write("/tmp/out.bmp");
 
+    system("mkdir -p ../results/");
     system("convert "
            "-resize 500x500 "
            "../../tests/images/man.bmp /tmp/out.bmp +append "
-           "testbinarize-man_bmp-100.png");
+           "../results/testbinarize-man_bmp-100.png");
 }
 
 int main(int argc, char **argv)
