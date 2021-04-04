@@ -1,0 +1,31 @@
+enable_testing()
+include(GoogleTest)
+include_directories(${CMAKE_SOURCE_DIR}/src)
+
+add_executable(testgsbinarize testgsbinarize.cpp)
+target_link_libraries(testgsbinarize gtest imgproc)
+gtest_discover_tests(testgsbinarize)
+
+add_executable(testunibrightnessadjustment testunibrightnessadjustment.cpp)
+target_link_libraries(testunibrightnessadjustment gtest imgproc)
+gtest_discover_tests(testunibrightnessadjustment)
+
+add_executable(testgshistogram testgshistogram.cpp)
+target_link_libraries(testgshistogram gtest imgproc)
+gtest_discover_tests(testgshistogram)
+
+add_executable(testgshistogramequalization testgshistogramequalization.cpp)
+target_link_libraries(testgshistogramequalization gtest imgproc)
+gtest_discover_tests(testgshistogramequalization)
+
+add_executable(testgsrotate testgsrotate.cpp)
+target_link_libraries(testgsrotate gtest imgproc)
+gtest_discover_tests(testgsrotate)
+
+add_executable(testuninegative testuninegative.cpp)
+target_link_libraries(testuninegative gtest imgproc)
+gtest_discover_tests(testuninegative)
+
+add_executable(testgskernelfilter testgskernelfilter.cpp)
+target_link_libraries(testgskernelfilter gtest imgproc)
+gtest_discover_tests(testgskernelfilter)
