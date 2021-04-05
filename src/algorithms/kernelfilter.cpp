@@ -3,7 +3,7 @@
 
 void KernelFilter::apply8bit(std::shared_ptr<Image> &image)
 {
-    if (mKernelType == Kernel::Type::Unknown) {
+    if (mKernelType == Kernel::Mask::Unknown) {
         return;
     }
 
@@ -16,15 +16,15 @@ void KernelFilter::apply8bit(std::shared_ptr<Image> &image)
     for (int32_t y = 0; y < imgHeight; y++) {
         for (int32_t x = 0; x < imgWidth; x++) {
             Coordinate pos{x, y};
-            calculateFilterWindow(image, imgCopy, pos, kernel);
+            convolute(image, imgCopy, pos, kernel);
         }
     }
 }
 
-void KernelFilter::calculateFilterWindow(std::shared_ptr<Image> &image,
-                                         std::shared_ptr<std::vector<uint8_t>> &imageCopy,
-                                         const Coordinate &pos,
-                                         const Kernel &kernel)
+void KernelFilter::convolute(std::shared_ptr<Image> &image,
+                             std::shared_ptr<std::vector<uint8_t>> &imageCopy,
+                             const Coordinate &pos,
+                             const Kernel &kernel)
 {
     const auto kWidth = kernel.getSize().width;
     const auto kHeight = kernel.getSize().height;
@@ -43,32 +43,14 @@ void KernelFilter::calculateFilterWindow(std::shared_ptr<Image> &image,
         for (int32_t x = absPosTopLeft.x; x < absPosTopLeft.x + kWidth; x++) {
             int xClamped = std::clamp(x, 0, imgWidthMaxPos);
             int yClamped = std::clamp(y, 0, imgHeightMaxPos);
-            uint8_t pixel = 0;
-
-            if (kernel.calculateModifiedPixels()) {
-                auto pixelRef = image->at({xClamped, yClamped});
-                pixel = *pixelRef;
-            }
-            else {
-                auto p2 = coordinateToVectorIndex({xClamped, yClamped}, image->resolution());
-                pixel = imageCopy->at(p2);
-            }
-
+            auto p2 = coordinateToVectorIndex({xClamped, yClamped}, image->resolution());
+            auto pixel = imageCopy->at(p2);
             auto w = kernel.at({x - absPosTopLeft.x, y - absPosTopLeft.y});
-
             auto calc = pixel * w;
             sum = sum + calc;
         }
     }
 
     sum = std::clamp<double>(round(sum), 0.0, 255.0);
-
-    // Set each pixel in the window to sum
-    for (int32_t y = absPosTopLeft.y; y < absPosTopLeft.y + kHeight; y++) {
-        for (int32_t x = absPosTopLeft.x; x < absPosTopLeft.x + kWidth; x++) {
-            int xClamped = std::clamp(x, 0, imgWidthMaxPos);
-            int yClamped = std::clamp(y, 0, imgHeightMaxPos);
-            image->setValue({xClamped, yClamped}, sum);
-        }
-    }
+    image->setValue(pos, sum);
 }

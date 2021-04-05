@@ -6,7 +6,7 @@
 class KernelFilter final: public Algorithm
 {
 public:
-    void setKernelType(Kernel::Type kernelType)
+    void setKernelType(Kernel::Mask kernelType)
     {
         mKernelType = kernelType;
     }
@@ -14,12 +14,12 @@ public:
     void apply8bit(std::shared_ptr<Image> &image) override;
 
 private:
-    void calculateFilterWindow(std::shared_ptr<Image> &image,
-                               std::shared_ptr<std::vector<uint8_t>> &imageCopy,
-                               const Coordinate &pos,
-                               const Kernel &kernel);
+    void convolute(std::shared_ptr<Image> &image,
+                   std::shared_ptr<std::vector<uint8_t>> &imageCopy,
+                   const Coordinate &pos,
+                   const Kernel &kernel);
 
 private:
-    Kernel::Type mKernelType = Kernel::Type::Unknown;
+    Kernel::Mask mKernelType = Kernel::Mask::Unknown;
     std::shared_ptr<Kernel> mKernel;
 };

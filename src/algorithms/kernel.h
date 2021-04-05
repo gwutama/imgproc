@@ -6,7 +6,7 @@
 class Kernel
 {
 public:
-    enum class Type
+    enum class Mask
     {
         Unknown = 0,
         BoxBlur,
@@ -16,9 +16,23 @@ public:
         GaussianBlur5x5,
         LineDetectHorizontal,
         LineDetectVertical,
+        PrewittVertical,
+        PrewittHorizontal,
+        SobelVertical,
+        SobelHorizontal,
+        RobinsonNorth,
+        RobinsonWest,
+        RobinsonSouth,
+        RobinsonEast,
+        KirschNorth,
+        KirschWest,
+        KirschSouth,
+        KirschEast,
+        LaplacianNegative,
+        LaplacianPositive,
     };
 
-    explicit Kernel(Type kernel);
+    explicit Kernel(Mask mask);
 
     const std::shared_ptr<std::vector<double>> &getKernel() const
     {
@@ -36,13 +50,7 @@ public:
         return mKernel->at(pos);
     }
 
-    bool calculateModifiedPixels() const
-    {
-        return mCalculateModifiedPixels;
-    }
-
 private:
     std::shared_ptr<std::vector<double>> mKernel;
     Size mSize;
-    bool mCalculateModifiedPixels = false;
 };
