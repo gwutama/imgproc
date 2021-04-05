@@ -15,10 +15,10 @@ void Rotate::apply8bit(std::shared_ptr<Image> &image)
 
     auto imageCp = image->pixelDataCopy();
 
-    for (uint32_t y = 0; y < h; y++) {
-        for (uint32_t x = 0; x < w; x++) {
-            uint32_t x2 = cosTheta * (x - x0) + sinTheta * (y - y0) + x0;
-            uint32_t y2 = -1 * sinTheta * (x - x0) + cosTheta * (y - y0) + y0;
+    for (int32_t y = 0; y < h; y++) {
+        for (int32_t x = 0; x < w; x++) {
+            int32_t x2 = cosTheta * (x - x0) + sinTheta * (y - y0) + x0;
+            int32_t y2 = -1 * sinTheta * (x - x0) + cosTheta * (y - y0) + y0;
             auto pos = coordinateToVectorIndex({x, y}, res);
             auto val = imageCp->at(pos);
             auto pixelRef = image->at({x2, y2});

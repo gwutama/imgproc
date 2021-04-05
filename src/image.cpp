@@ -36,8 +36,8 @@ Size Image::resolution()
 
     auto header = mBitmapFile->getInfoHeader();
     return {
-        static_cast<uint32_t>(header->biWidth),
-        static_cast<uint32_t>(header->biHeight)
+        static_cast<int32_t>(header->biWidth),
+        static_cast<int32_t>(header->biHeight)
     };
 }
 
@@ -87,7 +87,7 @@ std::shared_ptr<ByteArray> Image::pixelDataCopy()
     return copy;
 }
 
-uint8_t *Image::at(Coordinate coord)
+uint8_t *Image::at(const Coordinate& coord)
 {
     if (mBitmapFile == nullptr) {
         return 0;
@@ -95,7 +95,8 @@ uint8_t *Image::at(Coordinate coord)
 
     auto res = resolution();
 
-    if (coord.x >= res.width || coord.y >= res.height) {
+    // Out of bounds
+    if (coord.x >= res.width || coord.x < 0 || coord.y >= res.height || coord.y < 0) {
         return nullptr;
     }
 
@@ -104,43 +105,22 @@ uint8_t *Image::at(Coordinate coord)
     return pixel;
 }
 
-std::vector<GsFilterWindow> Image::calculateFilterWindows(const Size &windowSize)
+bool Image::setValue(const Coordinate &coord, uint8_t value)
 {
     if (mBitmapFile == nullptr) {
-        return {};
+        return false;
     }
 
-    auto imgWidth = resolution().width;
-    auto imgHeight = resolution().height;
-    auto windows = std::vector<GsFilterWindow>();
+    auto res = resolution();
 
-    for (uint32_t y = 0; y < imgHeight; y += windowSize.height) {
-        for (uint32_t x = 0; x < imgWidth; x += windowSize.width) {
-            auto window = calculateFilterWindow({x, y}, windowSize);
-            windows.push_back(window);
-        }
+    // Out of bounds
+    if (coord.x >= res.width || coord.x < 0 || coord.y >= res.height || coord.y < 0) {
+        return false;
     }
 
-    return windows;
-}
-
-GsFilterWindow Image::calculateFilterWindow(const Coordinate &topLeftPixel,
-                                            const Size &windowSize)
-{
-    if (mBitmapFile == nullptr) {
-        return {};
-    }
-
-    GsFilterWindow window;
-
-    for (uint32_t y = topLeftPixel.y; y < (topLeftPixel.y + windowSize.height); y++) {
-        for (uint32_t x = topLeftPixel.x; x < (topLeftPixel.x + windowSize.width); x++) {
-            auto pixelRef = at({x, y});
-            window.addPixelRef(pixelRef);
-        }
-    }
-
-    return window;
+    auto pos = coordinateToVectorIndex(coord, res);
+    pixelData()->at(pos) = value;
+    return true;
 }
 
 void Image::applyAlgorithm(std::shared_ptr<Algorithm> algorithm)

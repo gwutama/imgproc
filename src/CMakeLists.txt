@@ -13,7 +13,6 @@ set(SOURCE_FILES
         algorithms/rotate.cpp
         algorithms/kernelfilter.cpp
         algorithms/kernel.cpp
-        algorithms/gsfilterwindow.cpp
         algorithms/brightnessadjustment.cpp
         algorithms/negative.cpp
 )

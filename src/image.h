@@ -3,7 +3,6 @@
 #include <memory>
 #include "common.h"
 #include "bitmap/bitmapfile.h"
-#include "algorithms/gsfilterwindow.h"
 
 class Algorithm;
 
@@ -20,13 +19,12 @@ public:
     std::shared_ptr<ByteArray> pixelDataCopy();
     bool write(const std::string& path);
     bool write();
-    uint8_t *at(Coordinate coord);
-    std::vector<GsFilterWindow> calculateFilterWindows(const Size &windowSize);
-    void applyAlgorithm(std::shared_ptr<Algorithm> algorithm);
 
-private:
-    GsFilterWindow calculateFilterWindow(const Coordinate &topLeftPixel,
-                                         const Size &windowSize);
+    // 8bit images only
+    uint8_t *at(const Coordinate& coord);
+    bool setValue(const Coordinate& coord, uint8_t value);
+
+    void applyAlgorithm(std::shared_ptr<Algorithm> algorithm);
 
 private:
     std::shared_ptr<BitmapFile> mBitmapFile;

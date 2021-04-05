@@ -6,20 +6,19 @@
 class Kernel
 {
 public:
-    enum class KernelType
+    enum class Type
     {
         Unknown = 0,
         BoxBlur,
         Sharpen,
-        EdgeDetection,
+        EdgeDetect,
+        GaussianBlur3x3,
         GaussianBlur5x5,
         LineDetectHorizontal,
         LineDetectVertical,
     };
 
-    explicit Kernel(KernelType kernel);
-    Kernel(std::shared_ptr<std::vector<double>> kernel,
-           const Size &size);
+    explicit Kernel(Type kernel);
 
     const std::shared_ptr<std::vector<double>> &getKernel() const
     {
@@ -31,7 +30,19 @@ public:
         return mSize;
     }
 
+    const double &at(Coordinate coord) const
+    {
+        auto pos = coordinateToVectorIndex(coord, mSize);
+        return mKernel->at(pos);
+    }
+
+    bool calculateModifiedPixels() const
+    {
+        return mCalculateModifiedPixels;
+    }
+
 private:
     std::shared_ptr<std::vector<double>> mKernel;
     Size mSize;
+    bool mCalculateModifiedPixels = false;
 };

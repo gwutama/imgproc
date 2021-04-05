@@ -21,14 +21,14 @@ struct Rgba
 
 struct Size
 {
-    uint32_t width;
-    uint32_t height;
+    int32_t width;
+    int32_t height;
 };
 
 struct Coordinate
 {
-    uint32_t x;
-    uint32_t y;
+    int32_t x;
+    int32_t y;
 };
 
 typedef std::vector<uint8_t> ByteArray;

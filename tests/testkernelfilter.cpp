@@ -2,10 +2,26 @@
 #include <image.h>
 #include <algorithms/kernelfilter.h>
 
+TEST(TestKernelFilter, all_gray_bmp_boxblur)
+{
+    auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
+    kernelFilter->setKernelType(Kernel::Type::BoxBlur);
+
+    auto image = Image::fromFile("../../tests/images/all_gray.bmp");
+    image->applyAlgorithm(kernelFilter);
+    image->write("/tmp/out.bmp");
+
+    system("mkdir -p ../results/");
+    system("convert "
+           "-resize 500x500 "
+           "../../tests/images/all_gray.bmp /tmp/out.bmp +append "
+           "../results/testkernelfilter-all_gray_bmp-boxblur.png");
+}
+
 TEST(TestKernelFilter, man_bmp_boxblur)
 {
     auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
-    kernelFilter->setKernelType(Kernel::KernelType::BoxBlur);
+    kernelFilter->setKernelType(Kernel::Type::BoxBlur);
 
     auto image = Image::fromFile("../../tests/images/man.bmp");
     image->applyAlgorithm(kernelFilter);
@@ -21,7 +37,7 @@ TEST(TestKernelFilter, man_bmp_boxblur)
 TEST(TestKernelFilter, lena_bmp_sharpen)
 {
     auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
-    kernelFilter->setKernelType(Kernel::KernelType::Sharpen);
+    kernelFilter->setKernelType(Kernel::Type::Sharpen);
 
     auto image = Image::fromFile("../../tests/images/lena.bmp");
     image->applyAlgorithm(kernelFilter);
@@ -37,7 +53,7 @@ TEST(TestKernelFilter, lena_bmp_sharpen)
 TEST(TestKernelFilter, girlface_bmp_edgedetection)
 {
     auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
-    kernelFilter->setKernelType(Kernel::KernelType::EdgeDetection);
+    kernelFilter->setKernelType(Kernel::Type::EdgeDetect);
 
     auto image = Image::fromFile("../../tests/images/girlface.bmp");
     image->applyAlgorithm(kernelFilter);
@@ -50,10 +66,26 @@ TEST(TestKernelFilter, girlface_bmp_edgedetection)
            "../results/testkernelfilter-girlface_bmp-edgedetection.png");
 }
 
+TEST(TestKernelFilter, man_bmp_gaussianblur3x3)
+{
+    auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
+    kernelFilter->setKernelType(Kernel::Type::GaussianBlur3x3);
+
+    auto image = Image::fromFile("../../tests/images/man.bmp");
+    image->applyAlgorithm(kernelFilter);
+    image->write("/tmp/out.bmp");
+
+    system("mkdir -p ../results/");
+    system("convert "
+           "-resize 500x500 "
+           "../../tests/images/man.bmp /tmp/out.bmp +append "
+           "../results/testkernelfilter-man_bmp-gaussianblur3x3.png");
+}
+
 TEST(TestKernelFilter, man_bmp_gaussianblur5x5)
 {
     auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
-    kernelFilter->setKernelType(Kernel::KernelType::GaussianBlur5x5);
+    kernelFilter->setKernelType(Kernel::Type::GaussianBlur5x5);
 
     auto image = Image::fromFile("../../tests/images/man.bmp");
     image->applyAlgorithm(kernelFilter);
@@ -69,7 +101,7 @@ TEST(TestKernelFilter, man_bmp_gaussianblur5x5)
 TEST(TestKernelFilter, houses_bmp_linedetecthorizontal)
 {
     auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
-    kernelFilter->setKernelType(Kernel::KernelType::LineDetectHorizontal);
+    kernelFilter->setKernelType(Kernel::Type::LineDetectHorizontal);
 
     auto image = Image::fromFile("../../tests/images/houses.bmp");
     image->applyAlgorithm(kernelFilter);
@@ -85,7 +117,7 @@ TEST(TestKernelFilter, houses_bmp_linedetecthorizontal)
 TEST(TestKernelFilter, houses_bmp_linedetectvertical)
 {
     auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
-    kernelFilter->setKernelType(Kernel::KernelType::LineDetectVertical);
+    kernelFilter->setKernelType(Kernel::Type::LineDetectVertical);
 
     auto image = Image::fromFile("../../tests/images/houses.bmp");
     image->applyAlgorithm(kernelFilter);
