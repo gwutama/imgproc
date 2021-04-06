@@ -15,6 +15,7 @@ set(SOURCE_FILES
         algorithms/kernel.cpp
         algorithms/brightnessadjustment.cpp
         algorithms/negative.cpp
+        algorithms/downsampling.cpp
 )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

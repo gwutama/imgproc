@@ -41,6 +41,18 @@ Size Image::resolution()
     };
 }
 
+void Image::setResolution(Size size)
+{
+    if (mBitmapFile == nullptr) {
+        return;
+    }
+
+    mBitmapFile->getInfoHeader()->biWidth = size.width;
+    mBitmapFile->getInfoHeader()->biHeight = size.height;
+    mBitmapFile->getInfoHeader()->biSizeImage = size.width * size.height;
+    mBitmapFile->getFileHeader()->bfSize = 0;
+}
+
 std::shared_ptr<ByteArray> Image::pixelData()
 {
     if (mBitmapFile == nullptr) {
@@ -48,6 +60,15 @@ std::shared_ptr<ByteArray> Image::pixelData()
     }
 
     return mBitmapFile->getPixelData();
+}
+
+void Image::setPixelData(std::shared_ptr<ByteArray> data)
+{
+    if (mBitmapFile == nullptr) {
+        return;
+    }
+
+    mBitmapFile->setPixelData(data);
 }
 
 bool Image::write(const std::string &path)
@@ -87,7 +108,7 @@ std::shared_ptr<ByteArray> Image::pixelDataCopy()
     return copy;
 }
 
-uint8_t *Image::at(const Coordinate& coord)
+uint8_t *Image::pixel8bit(const Coordinate &coord)
 {
     if (mBitmapFile == nullptr) {
         return 0;
@@ -105,7 +126,7 @@ uint8_t *Image::at(const Coordinate& coord)
     return pixel;
 }
 
-bool Image::setValue(const Coordinate &coord, uint8_t value)
+bool Image::setPixel(const Coordinate &coord, uint8_t value)
 {
     if (mBitmapFile == nullptr) {
         return false;

@@ -46,11 +46,10 @@ void KernelFilter::convolute(std::shared_ptr<Image> &image,
             auto p2 = coordinateToVectorIndex({xClamped, yClamped}, image->resolution());
             auto pixel = imageCopy->at(p2);
             auto w = kernel.at({x - absPosTopLeft.x, y - absPosTopLeft.y});
-            auto calc = pixel * w;
-            sum = sum + calc;
+            sum = sum + (pixel * w);
         }
     }
 
     sum = std::clamp<double>(round(sum), 0.0, 255.0);
-    image->setValue(pos, sum);
+    image->setPixel(pos, sum);
 }

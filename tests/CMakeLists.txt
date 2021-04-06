@@ -28,3 +28,7 @@ gtest_discover_tests(testnegative)
 add_executable(testkernelfilter testkernelfilter.cpp)
 target_link_libraries(testkernelfilter gtest imgproc)
 gtest_discover_tests(testkernelfilter)
+
+add_executable(testdownsampling testdownsampling.cpp)
+target_link_libraries(testdownsampling gtest imgproc)
+gtest_discover_tests(testdownsampling)

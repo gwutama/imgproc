@@ -42,7 +42,7 @@ struct BitmapInfoHeader
 // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-rgbquad
 struct BitmapRgbQuad
 {
-    // 4 bytes, 16 bit
+    // 4 bytes, 32 bit
     uint8_t rgbBlue;
     uint8_t rgbGreen;
     uint8_t rgbRed;

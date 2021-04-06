@@ -15,14 +15,16 @@ public:
 
     uint8_t bitDepth();
     Size resolution();
+    void setResolution(Size size);
     std::shared_ptr<ByteArray> pixelData();
+    void setPixelData(std::shared_ptr<ByteArray> data);
     std::shared_ptr<ByteArray> pixelDataCopy();
     bool write(const std::string& path);
     bool write();
 
     // 8bit images only
-    uint8_t *at(const Coordinate& coord);
-    bool setValue(const Coordinate& coord, uint8_t value);
+    uint8_t *pixel8bit(const Coordinate& coord);
+    bool setPixel(const Coordinate& coord, uint8_t value);
 
     void applyAlgorithm(std::shared_ptr<Algorithm> algorithm);
 
