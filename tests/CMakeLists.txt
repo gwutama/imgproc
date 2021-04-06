@@ -32,3 +32,7 @@ gtest_discover_tests(testkernelfilter)
 add_executable(testdownsampling testdownsampling.cpp)
 target_link_libraries(testdownsampling gtest imgproc)
 gtest_discover_tests(testdownsampling)
+
+add_executable(testnoise testnoise.cpp)
+target_link_libraries(testnoise gtest imgproc)
+gtest_discover_tests(testnoise)
