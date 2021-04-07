@@ -66,6 +66,22 @@ TEST(TestKernelFilter, lena_bmp_sharpen)
            "../results/testkernelfilter-lena_bmp-sharpen.png");
 }
 
+TEST(TestKernelFilter, girlface_bmp_sharpen)
+{
+    auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
+    kernelFilter->setKernelType(Kernel::Mask::Sharpen);
+
+    auto image = Image::fromFile("../../tests/images/girlface.bmp");
+    image->applyAlgorithm(kernelFilter);
+    image->write("/tmp/out.bmp");
+
+    system("mkdir -p ../results/");
+    system("convert "
+           "-resize 500x500 "
+           "../../tests/images/girlface.bmp /tmp/out.bmp +append "
+           "../results/testkernelfilter-girlface_bmp-sharpen.png");
+}
+
 TEST(TestKernelFilter, girlface_bmp_edgedetection)
 {
     auto kernelFilter = std::shared_ptr<KernelFilter>(new KernelFilter);
