@@ -46,7 +46,7 @@ public:
 
     const double &at(Coordinate coord) const
     {
-        auto pos = coordinateToVectorIndex(coord, mSize);
+        auto pos = coordToIndex8bit(coord, mSize);
         return mKernel->at(pos);
     }
 

@@ -19,7 +19,7 @@ void Rotate::apply8bit(std::shared_ptr<Image> &image)
         for (int32_t x = 0; x < w; x++) {
             int32_t x2 = cosTheta * (x - x0) + sinTheta * (y - y0) + x0;
             int32_t y2 = -1 * sinTheta * (x - x0) + cosTheta * (y - y0) + y0;
-            auto pos = coordinateToVectorIndex({x, y}, res);
+            auto pos = coordToIndex8bit({x, y}, res);
             auto val = imageCp->at(pos);
             auto pixelRef = image->pixel8bit({x2, y2});
 

@@ -18,31 +18,38 @@ std::shared_ptr<BitmapFile> BitmapFile::fromFile(const std::string &filePath)
     // read bitmap file header
     char bitmapFileHeader[BITMAP_FILEHEADER_SIZE];
     ifs.read(bitmapFileHeader, BITMAP_FILEHEADER_SIZE);
-    auto fileHeaderRef = bmpFile->getFileHeader();
-    memcpy(fileHeaderRef.get(), bitmapFileHeader, BITMAP_FILEHEADER_SIZE);
+    auto fileHeaderRef = bmpFile->mFileHeader;
+    memcpy(&fileHeaderRef.get()->bfType, bitmapFileHeader, BITMAP_FILEHEADER_SIZE);
 
     // read bitmap info header
     uint32_t ifsOffset = BITMAP_FILEHEADER_SIZE;
     char bitmapInfoHeader[BITMAP_INFOHEADER_SIZE];
     ifs.seekg(ifsOffset, ifs.beg);
     ifs.read(bitmapInfoHeader, BITMAP_INFOHEADER_SIZE);
-    auto infoHeaderRef = bmpFile->getInfoHeader();
+    auto infoHeaderRef = bmpFile->mInfoHeader;
     memcpy(infoHeaderRef.get(), bitmapInfoHeader, BITMAP_INFOHEADER_SIZE);
 
-    if (infoHeaderRef->biBitCount != 8 &&
-        infoHeaderRef->biBitCount != 16 &&
-        infoHeaderRef->biBitCount != 24) {
-        std::cerr << "Unsupported bit count: " << infoHeaderRef->biBitCount << std::endl;
-        return {};
+    if (infoHeaderRef->biSize != BITMAP_INFOHEADER_SIZE) {
+        std::cerr << "Unsupported bitmap. Structure is not BITMAPINFOHEADER." << std::endl;
+        return nullptr;
+    }
+
+    if (bmpFile->getBitDepth() != 8 && bmpFile->getBitDepth() != 24) {
+        std::cerr << "Unsupported bit count: " << bmpFile->getBitDepth() << std::endl;
+        return nullptr;
     }
 
     // read color table
+    // Color table is irrelevant for images with bit depths > 8
+    // and is usually set to 0 for images with bit depths > 8
     ifsOffset = ifsOffset + BITMAP_INFOHEADER_SIZE;
     auto colorTableSize = infoHeaderRef->biClrUsed;
 
     // Calculate default color table size if it is set to 0
-    if (colorTableSize == 0) {
-        colorTableSize = pow(2, infoHeaderRef->biBitCount);
+    // Color table is irrelevant for images with bit depths > 8
+    // IF color table is 0, then the default color table size is assumed (2 ^ bit depth)
+    if (colorTableSize == 0 && bmpFile->getBitDepth() <= 8) {
+        colorTableSize = pow(2, bmpFile->getBitDepth());
     }
 
     auto colorTableNumBytes = colorTableSize * BITMAP_RGBQUAD_SIZE;
@@ -58,8 +65,13 @@ std::shared_ptr<BitmapFile> BitmapFile::fromFile(const std::string &filePath)
     }
 
     // read pixel data
-    auto pixelSize = infoHeaderRef->biWidth * infoHeaderRef->biHeight;
-    auto pixelDataNumBytes = pixelSize * (infoHeaderRef->biBitCount / 8);
+    auto pixelSize = infoHeaderRef->biSizeImage;
+
+    if (pixelSize == 0) {
+        pixelSize = infoHeaderRef->biWidth * infoHeaderRef->biHeight;
+    }
+
+    auto pixelDataNumBytes = pixelSize * (bmpFile->getBitDepth() / 8);
     auto pixelDataRef = bmpFile->getPixelData();
     pixelDataRef->reserve(pixelDataNumBytes);
 
@@ -77,8 +89,41 @@ std::shared_ptr<BitmapFile> BitmapFile::fromFile(const std::string &filePath)
     return bmpFile;
 }
 
+BitmapFile::BitmapFile(Size size, uint8_t bitDepth, uint8_t fill)
+{
+    setBitDepth(bitDepth);
+    setResolution(size);
+
+    if (!isBitDepthSupported(bitDepth)) {
+        std::cerr << "Invalid bit depth: " << bitDepth << ". Setting to 8." << std::endl;
+        bitDepth = 8;
+    }
+
+    // reserve pixel data
+    auto stride = size.width;
+
+    // if width is odd, we need to add padding (stride)
+    if (size.width % 2) {
+        stride = calculateStride();
+    }
+
+    auto pixelDataSize = stride * size.height * (bitDepth / 8);
+    auto pixelData = std::shared_ptr<ByteArray>(new ByteArray);
+
+    for (int i = 0; i < pixelDataSize; i++) {
+        pixelData->push_back(fill);
+    }
+
+    setPixelData(pixelData);
+}
+
 bool BitmapFile::write()
 {
+    if (mFileName.empty()) {
+        std::cerr << "File name is empty" << std::endl;
+        return false;
+    }
+
     return write(mFileName);
 }
 
@@ -92,6 +137,8 @@ bool BitmapFile::write(const std::string &path)
     }
 
     // Write file header
+    mFileHeader->bfSize = calculateBitmapFileSize();
+    mFileHeader->bfOffBits = calculateBitmapDataOffset();
     char fileHeader[BITMAP_FILEHEADER_SIZE];
     memcpy(fileHeader, mFileHeader.get(), BITMAP_FILEHEADER_SIZE);
     ofs.write(fileHeader, BITMAP_FILEHEADER_SIZE);
@@ -128,4 +175,48 @@ bool BitmapFile::write(const std::string &path)
     ofs.close();
 
     return true;
+}
+
+void BitmapFile::setBitDepth(uint8_t bitDepth)
+{
+    mInfoHeader->biBitCount = bitDepth;
+
+    if (bitDepth <= 8) {
+        mColorTable->clear();
+
+        auto colorTableSize = pow(2, getBitDepth());
+        mInfoHeader->biClrUsed = colorTableSize;
+
+        for (uint32_t i = 0; i < colorTableSize; i++) {
+            uint8_t val = static_cast<uint8_t>(i);
+            BitmapRgbQuad rgbQuad{ val, val, val };
+            mColorTable->push_back(rgbQuad);
+        }
+    }
+}
+
+uint32_t BitmapFile::calculateBitmapFileSize()
+{
+    uint32_t pixelDataSize = mPixelData->size() / (getBitDepth() / 8);
+    uint32_t colorTableSize = mColorTable->size();
+    uint32_t size = calculateBitmapDataOffset() + colorTableSize + pixelDataSize;
+    return size;
+}
+
+uint32_t BitmapFile::calculateBitmapDataOffset()
+{
+    uint32_t size = BITMAP_FILEHEADER_SIZE + BITMAP_INFOHEADER_SIZE;
+    return size;
+}
+
+uint32_t BitmapFile::calculateStride(uint32_t width, uint8_t bitCount)
+{
+    auto stride = (((width * bitCount) + 31) & ~31) >> 3;
+    return stride;
+}
+
+uint32_t BitmapFile::calculateStride()
+{
+    auto stride = (((mInfoHeader->biWidth * getBitDepth()) + 31) & ~31) >> 3;
+    return stride;
 }

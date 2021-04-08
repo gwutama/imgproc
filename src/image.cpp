@@ -1,5 +1,6 @@
 #include "image.h"
 #include "algorithms/algorithm.h"
+#include <iostream>
 
 std::shared_ptr<Image> Image::fromFile(const std::string &path)
 {
@@ -19,13 +20,32 @@ Image::Image(std::shared_ptr<BitmapFile> bitmapFile)
 {
 }
 
+Image::Image(Size size, uint8_t bitDepth, uint8_t fill)
+{
+    mBitmapFile = std::shared_ptr<BitmapFile>(new BitmapFile(size, bitDepth, fill));
+}
+
 uint8_t Image::bitDepth()
 {
     if (mBitmapFile == nullptr) {
         return 0;
     }
 
-    return mBitmapFile->getInfoHeader()->biBitCount;
+    return mBitmapFile->getBitDepth();
+}
+
+void Image::setBitDepth(uint8_t bitDepth)
+{
+    if (mBitmapFile == nullptr) {
+        return;
+    }
+
+    if (!BitmapFile::isBitDepthSupported(bitDepth)) {
+        std::cerr << "Unsupported bit depth: " << bitDepth << std::endl;
+        return;
+    }
+
+    mBitmapFile->setBitDepth(bitDepth);
 }
 
 Size Image::resolution()
@@ -34,11 +54,7 @@ Size Image::resolution()
         return {};
     }
 
-    auto header = mBitmapFile->getInfoHeader();
-    return {
-        static_cast<int32_t>(header->biWidth),
-        static_cast<int32_t>(header->biHeight)
-    };
+    return mBitmapFile->getResolution();
 }
 
 void Image::setResolution(Size size)
@@ -47,10 +63,7 @@ void Image::setResolution(Size size)
         return;
     }
 
-    mBitmapFile->getInfoHeader()->biWidth = size.width;
-    mBitmapFile->getInfoHeader()->biHeight = size.height;
-    mBitmapFile->getInfoHeader()->biSizeImage = size.width * size.height;
-    mBitmapFile->getFileHeader()->bfSize = 0;
+    mBitmapFile->setResolution(size);
 }
 
 std::shared_ptr<ByteArray> Image::pixelData()
@@ -77,12 +90,20 @@ bool Image::write(const std::string &path)
         return false;
     }
 
+    if (path.empty()) {
+        return false;
+    }
+
     return mBitmapFile->write(path);
 }
 
 bool Image::write()
 {
     if (mBitmapFile == nullptr) {
+        return false;
+    }
+
+    if (mBitmapFile->getFileName().empty()) {
         return false;
     }
 
@@ -121,7 +142,7 @@ uint8_t *Image::pixel8bit(const Coordinate &coord)
         return nullptr;
     }
 
-    auto pos = coordinateToVectorIndex(coord, res);
+    auto pos = coordToIndex8bit(coord, res);
     auto pixel = &(pixelData()->at(pos));
     return pixel;
 }
@@ -139,7 +160,7 @@ bool Image::setPixel(const Coordinate &coord, uint8_t value)
         return false;
     }
 
-    auto pos = coordinateToVectorIndex(coord, res);
+    auto pos = coordToIndex8bit(coord, res);
     pixelData()->at(pos) = value;
     return true;
 }

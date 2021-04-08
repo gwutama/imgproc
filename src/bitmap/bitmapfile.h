@@ -4,10 +4,15 @@
 #include <memory>
 #include "bitmaptypes.h"
 
+/**
+ * http://www.dragonwins.com/domains/getteched/bmp/bmpfileformat.htm
+ */
 class BitmapFile
 {
 public:
     static std::shared_ptr<BitmapFile> fromFile(const std::string &filePath);
+
+    BitmapFile(Size size, uint8_t bitDepth, uint8_t fill = 0);
 
     bool write();
     bool write(const std::string &path);
@@ -17,26 +22,6 @@ public:
         return mFileName;
     }
 
-    const std::shared_ptr<BitmapFileHeader> &getFileHeader() const
-    {
-        return mFileHeader;
-    }
-
-    void setFileHeader(std::shared_ptr<BitmapFileHeader> fileHeader)
-    {
-        mFileHeader = fileHeader;
-    }
-
-    const std::shared_ptr<BitmapInfoHeader> &getInfoHeader() const
-    {
-        return mInfoHeader;
-    }
-
-    void setInfoHeader(std::shared_ptr<BitmapInfoHeader> infoHeader)
-    {
-        mInfoHeader = infoHeader;
-    }
-
     const std::shared_ptr<RgbQuadArray> &getColorTable() const
     {
         return mColorTable;
@@ -44,6 +29,7 @@ public:
 
     void setColorTable(const std::shared_ptr<RgbQuadArray> &colorTable)
     {
+        mInfoHeader->biClrUsed = colorTable->size();
         mColorTable = colorTable;
     }
 
@@ -54,11 +40,43 @@ public:
 
     void setPixelData(const std::shared_ptr<ByteArray> &pixelData)
     {
+        mInfoHeader->biSizeImage = pixelData->size();
         mPixelData = pixelData;
     }
 
+    void setResolution(Size size)
+    {
+        mInfoHeader->biWidth = size.width;
+        mInfoHeader->biHeight = size.height;
+    }
+
+    uint8_t getBitDepth()
+    {
+        return mInfoHeader->biBitCount;
+    }
+
+    void setBitDepth(uint8_t bitDepth);
+
+    Size getResolution()
+    {
+        return {
+            static_cast<int32_t>(mInfoHeader->biWidth),
+            static_cast<int32_t>(mInfoHeader->biHeight)
+        };
+    }
+
+    static bool isBitDepthSupported(uint8_t bitDepth)
+    {
+        return (bitDepth == 8 || bitDepth == 24 || bitDepth == 32);
+    }
+
 private:
-    BitmapFile() = default;
+    explicit BitmapFile() = default;
+
+    uint32_t calculateBitmapFileSize();
+    uint32_t calculateBitmapDataOffset();
+    uint32_t calculateStride(uint32_t width, uint8_t bitCount);
+    uint32_t calculateStride();
 
 private:
     std::string mFileName;

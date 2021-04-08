@@ -17,6 +17,7 @@ set(SOURCE_FILES
         algorithms/negative.cpp
         algorithms/downsampling.cpp
         algorithms/noise.cpp
+        algorithms/bgrtogray.cpp
 )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

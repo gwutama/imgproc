@@ -1,6 +1,10 @@
 include(GoogleTest)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
+add_executable(testbitmapfile testbitmapfile.cpp)
+target_link_libraries(testbitmapfile gtest imgproc)
+gtest_discover_tests(testbitmapfile)
+
 add_executable(testbinarize testbinarize.cpp)
 target_link_libraries(testbinarize gtest imgproc)
 gtest_discover_tests(testbinarize)
@@ -36,3 +40,7 @@ gtest_discover_tests(testdownsampling)
 add_executable(testnoise testnoise.cpp)
 target_link_libraries(testnoise gtest imgproc)
 gtest_discover_tests(testnoise)
+
+add_executable(testbgrtogray testbgrtogray.cpp)
+target_link_libraries(testbgrtogray gtest imgproc)
+gtest_discover_tests(testbgrtogray)

@@ -43,7 +43,7 @@ void KernelFilter::convolute(std::shared_ptr<Image> &image,
         for (int32_t x = absPosTopLeft.x; x < absPosTopLeft.x + kWidth; x++) {
             int xClamped = std::clamp(x, 0, imgWidthMaxPos);
             int yClamped = std::clamp(y, 0, imgHeightMaxPos);
-            auto p2 = coordinateToVectorIndex({xClamped, yClamped}, image->resolution());
+            auto p2 = coordToIndex8bit({xClamped, yClamped}, image->resolution());
             auto pixel = imageCopy->at(p2);
             auto w = kernel.at({x - absPosTopLeft.x, y - absPosTopLeft.y});
             sum = sum + (pixel * w);
