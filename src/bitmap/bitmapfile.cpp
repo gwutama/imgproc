@@ -198,7 +198,7 @@ void BitmapFile::setBitDepth(uint8_t bitDepth)
 uint32_t BitmapFile::calculateBitmapFileSize()
 {
     uint32_t pixelDataSize = mPixelData->size() / (getBitDepth() / 8);
-    uint32_t colorTableSize = mColorTable->size();
+    uint32_t colorTableSize = mColorTable->size() * BITMAP_RGBQUAD_SIZE;
     uint32_t size = calculateBitmapDataOffset() + colorTableSize + pixelDataSize;
     return size;
 }
