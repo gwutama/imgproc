@@ -44,3 +44,7 @@ gtest_discover_tests(testnoise)
 add_executable(testbgrtogray testbgrtogray.cpp)
 target_link_libraries(testbgrtogray gtest imgproc)
 gtest_discover_tests(testbgrtogray)
+
+add_executable(testmorphologicalfilter testmorphologicalfilter.cpp)
+target_link_libraries(testmorphologicalfilter gtest imgproc)
+gtest_discover_tests(testmorphologicalfilter)

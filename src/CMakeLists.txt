@@ -18,6 +18,7 @@ set(SOURCE_FILES
         algorithms/downsampling.cpp
         algorithms/noise.cpp
         algorithms/bgrtogray.cpp
+        algorithms/morphologicalfilter.cpp
 )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

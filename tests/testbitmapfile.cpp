@@ -53,8 +53,6 @@ TEST(TestBitmapFile, black_8bit_5x5)
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-black_8bit_5x5.bmp");
-
-    auto bitmap2 = BitmapFile::fromFile("/tmp/out.bmp");
 }
 
 TEST(TestBitmapFile, black_8bit_10x10)
