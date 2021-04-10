@@ -28,10 +28,19 @@ TEST(TestBitmapFile, read_fruits)
     system("cp /tmp/out.bmp ../results/testbitmapfile-read_fruits.bmp");
 }
 
+TEST(TestBitmapFile, DISABLED_read_multfont)
+{
+    auto bitmap = BitmapFile::fromFile("../../tests/images/multfont.bmp");
+    bitmap->write("/tmp/out.bmp");
+
+    system("mkdir -p ../results/");
+    system("cp /tmp/out.bmp ../results/testbitmapfile-read_multfont.bmp");
+}
+
 TEST(TestBitmapFile, black_8bit_8x2)
 {
-    auto bitmap = BitmapFile({8, 2}, 8);
-    bitmap.write("/tmp/out.bmp");
+    auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({8, 2}, 8));
+    bitmap->write("/tmp/out.bmp");
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-black_8bit_8x2.bmp");
@@ -39,8 +48,8 @@ TEST(TestBitmapFile, black_8bit_8x2)
 
 TEST(TestBitmapFile, black_8bit_4x4)
 {
-    auto bitmap = BitmapFile({4, 4}, 8);
-    bitmap.write("/tmp/out.bmp");
+    auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({4, 4}, 8));
+    bitmap->write("/tmp/out.bmp");
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-black_8bit_4x4.bmp");
@@ -48,8 +57,8 @@ TEST(TestBitmapFile, black_8bit_4x4)
 
 TEST(TestBitmapFile, black_8bit_5x5)
 {
-    auto bitmap = BitmapFile({5, 5}, 8);
-    bitmap.write("/tmp/out.bmp");
+    auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({5, 5}, 8));
+    bitmap->write("/tmp/out.bmp");
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-black_8bit_5x5.bmp");
@@ -57,8 +66,8 @@ TEST(TestBitmapFile, black_8bit_5x5)
 
 TEST(TestBitmapFile, black_8bit_10x10)
 {
-    auto bitmap = BitmapFile({4, 4}, 8);
-    bitmap.write("/tmp/out.bmp");
+    auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({4, 4}, 8));
+    bitmap->write("/tmp/out.bmp");
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-black_8bit_10x10.bmp");
@@ -66,8 +75,8 @@ TEST(TestBitmapFile, black_8bit_10x10)
 
 TEST(TestBitmapFile, black_8bit_600x400)
 {
-    auto bitmap = BitmapFile({600, 400}, 8);
-    bitmap.write("/tmp/out.bmp");
+    auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({600, 400}, 8));
+    bitmap->write("/tmp/out.bmp");
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-black_8bit_600x400.bmp");
@@ -75,8 +84,8 @@ TEST(TestBitmapFile, black_8bit_600x400)
 
 TEST(TestBitmapFile, black_8bit_601x401)
 {
-    auto bitmap = BitmapFile({601, 401}, 8);
-    bitmap.write("/tmp/out.bmp");
+    auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({601, 401}, 8));
+    bitmap->write("/tmp/out.bmp");
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-black_8bit_601x401.bmp");
@@ -84,8 +93,8 @@ TEST(TestBitmapFile, black_8bit_601x401)
 
 TEST(TestBitmapFile, black_8bit_1024x1024)
 {
-    auto bitmap = BitmapFile({1024, 1024}, 8);
-    bitmap.write("/tmp/out.bmp");
+    auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({1024, 1024}, 8));
+    bitmap->write("/tmp/out.bmp");
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-black_8bit_1024x1024.bmp");
@@ -93,8 +102,8 @@ TEST(TestBitmapFile, black_8bit_1024x1024)
 
 TEST(TestBitmapFile, white_8bit_5x5)
 {
-    auto bitmap = BitmapFile({5, 5}, 8, 255);
-    bitmap.write("/tmp/out.bmp");
+    auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({5, 5}, 8, 255));
+    bitmap->write("/tmp/out.bmp");
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-white_8bit_5x5.bmp");
@@ -102,8 +111,8 @@ TEST(TestBitmapFile, white_8bit_5x5)
 
 TEST(TestBitmapFile, gray_8bit_100x100)
 {
-    auto bitmap = BitmapFile({100, 100}, 8, 128);
-    bitmap.write("/tmp/out.bmp");
+    auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({100, 100}, 8, 128));
+    bitmap->write("/tmp/out.bmp");
 
     system("mkdir -p ../results/");
     system("cp /tmp/out.bmp ../results/testbitmapfile-gray_8bit_100x100.bmp");

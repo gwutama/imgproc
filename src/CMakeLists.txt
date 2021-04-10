@@ -7,6 +7,8 @@ set(SOURCE_FILES
         common.cpp
         image.cpp
         bitmap/bitmapfile.cpp
+        bitmap/bitmapreader.cpp
+        bitmap/bitmapwriter.cpp
         algorithms/binarize.cpp
         algorithms/histogram.cpp
         algorithms/histogramequalization.cpp

@@ -40,11 +40,6 @@ void Image::setBitDepth(uint8_t bitDepth)
         return;
     }
 
-    if (!BitmapFile::isBitDepthSupported(bitDepth)) {
-        std::cerr << "Unsupported bit depth: " << bitDepth << std::endl;
-        return;
-    }
-
     mBitmapFile->setBitDepth(bitDepth);
 }
 

@@ -16,7 +16,7 @@ struct BitmapFileHeader
     uint16_t bfReserved1 = 0;
     uint16_t bfReserved2 = 0;
     uint32_t bfOffBits = 0;
-}__attribute__((packed));
+} __attribute__((packed));
 
 // https://docs.microsoft.com/en-us/previous-versions//dd183376(v=vs.85)
 // https://docs.microsoft.com/en-us/windows/win32/gdi/bitmap-header-types
@@ -35,7 +35,53 @@ struct BitmapInfoHeader
     int32_t biYPelsPerMeter = 0;
     uint32_t biClrUsed = 0;
     uint32_t biClrImportant = 0;
-}__attribute__((packed));
+} __attribute__((packed));
+
+// https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-ciexyz
+// https://github.com/tpn/winsdk-7/blob/master/v7.1A/Include/WinGDI.h
+struct CieXyz
+{
+    long ciexyzX;
+    long ciexyzY;
+    long ciexyzZ;
+} __attribute__((packed));
+
+// https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-ciexyztriple
+struct CieXyzTriple
+{
+    CieXyz ciexyzRed;
+    CieXyz ciexyzGreen;
+    CieXyz ciexyzBlue;
+} __attribute__((packed));
+
+// https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header
+struct BitmapV5Header
+{
+    uint32_t bV5Size;
+    int32_t bV5Width;
+    int32_t bV5Height;
+    uint16_t bV5Planes;
+    uint16_t bV5BitCount;
+    uint32_t bV5Compression;
+    uint32_t bV5SizeImage;
+    int32_t bV5XPelsPerMeter;
+    int32_t bV5YPelsPerMeter;
+    uint32_t bV5ClrUsed;
+    uint32_t bV5ClrImportant;
+    uint32_t bV5RedMask;
+    uint32_t bV5GreenMask;
+    uint32_t bV5BlueMask;
+    uint32_t bV5AlphaMask;
+    uint32_t bV5CSType;
+    CieXyzTriple bV5Endpoints;
+    uint32_t bV5GammaRed;
+    uint32_t bV5GammaGreen;
+    uint32_t bV5GammaBlue;
+    uint32_t bV5Intent;
+    uint32_t bV5ProfileData;
+    uint32_t bV5ProfileSize;
+    uint32_t bV5Reserved;
+} __attribute__((packed));
 
 // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-rgbquad
 struct BitmapRgbQuad
@@ -45,10 +91,17 @@ struct BitmapRgbQuad
     uint8_t rgbGreen = 0;
     uint8_t rgbRed = 0;
     uint8_t rgbReserved = 0;
-}__attribute__((packed));
+} __attribute__((packed));
+
+enum class BitmapVersion
+{
+    Unknown,
+    Old,
+    V5
+};
 
 typedef std::vector<BitmapRgbQuad> RgbQuadArray;
-
 const uint32_t BITMAP_FILEHEADER_SIZE = sizeof(BitmapFileHeader);
 const uint32_t BITMAP_INFOHEADER_SIZE = sizeof(BitmapInfoHeader);
+const uint32_t BITMAP_V5HEADER_SIZE = sizeof(BitmapV5Header);
 const uint32_t BITMAP_RGBQUAD_SIZE = sizeof(BitmapRgbQuad);
