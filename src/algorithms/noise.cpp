@@ -8,8 +8,8 @@ void Noise::apply8bit(std::shared_ptr<Image> &image)
     std::uniform_int_distribution<uint8_t> chance(0, 99);
     std::uniform_int_distribution<uint8_t> shade(0, 255);
 
-    for (int32_t y = 0; y < image->resolution().height; y++) {
-        for (int32_t x = 0; x < image->resolution().width; x++) {
+    for (int32_t y = 0; y < image->getResolution().height; y++) {
+        for (int32_t x = 0; x < image->getResolution().width; x++) {
             auto randChance = chance(generator);
 
             if (randChance < mProbability) {

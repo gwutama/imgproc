@@ -16,8 +16,8 @@ void MorphologicalFilter::apply8bit(std::shared_ptr<Image> &image)
 
 void MorphologicalFilter::maximum8bit(std::shared_ptr<Image> &image)
 {
-    const auto imgWidth = image->resolution().width;
-    const auto imgHeight = image->resolution().height;
+    const auto imgWidth = image->getResolution().width;
+    const auto imgHeight = image->getResolution().height;
     auto newPixelData = std::shared_ptr<ByteArray>(new ByteArray);
 
     for (int32_t y = 0; y < imgHeight; y++) {
@@ -43,8 +43,8 @@ void MorphologicalFilter::maximum8bit(std::shared_ptr<Image> &image)
 
 void MorphologicalFilter::minimum8bit(std::shared_ptr<Image> &image)
 {
-    const auto imgWidth = image->resolution().width;
-    const auto imgHeight = image->resolution().height;
+    const auto imgWidth = image->getResolution().width;
+    const auto imgHeight = image->getResolution().height;
     auto newPixelData = std::shared_ptr<ByteArray>(new ByteArray);
 
     for (int32_t y = 0; y < imgHeight; y++) {
@@ -70,8 +70,8 @@ void MorphologicalFilter::minimum8bit(std::shared_ptr<Image> &image)
 
 void MorphologicalFilter::average8bit(std::shared_ptr<Image> &image)
 {
-    const auto imgWidth = image->resolution().width;
-    const auto imgHeight = image->resolution().height;
+    const auto imgWidth = image->getResolution().width;
+    const auto imgHeight = image->getResolution().height;
     auto newPixelData = std::shared_ptr<ByteArray>(new ByteArray);
 
     for (int32_t y = 0; y < imgHeight; y++) {

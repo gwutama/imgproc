@@ -3,7 +3,7 @@
 
 void Rotate::apply8bit(std::shared_ptr<Image> &image)
 {
-    auto res = image->resolution();
+    auto res = image->getResolution();
     auto h = res.height;
     auto w = res.width;
 

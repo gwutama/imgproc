@@ -19,6 +19,15 @@ TEST(TestBitmapFile, read_gray_24bit_10x10)
     system("cp /tmp/out.bmp ../results/testbitmapfile-read_gray_24bit_10x10.bmp");
 }
 
+TEST(TestBitmapFile, read_bikes)
+{
+    auto bitmap = BitmapFile::fromFile("../../tests/images/bikes.bmp");
+    bitmap->write("/tmp/out.bmp");
+
+    system("mkdir -p ../results/");
+    system("cp /tmp/out.bmp ../results/testbitmapfile-read_bikes.bmp");
+}
+
 TEST(TestBitmapFile, read_fruits)
 {
     auto bitmap = BitmapFile::fromFile("../../tests/images/fruits.bmp");

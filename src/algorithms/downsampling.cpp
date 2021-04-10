@@ -7,7 +7,7 @@ void Downsampling::apply8bit(std::shared_ptr<Image> &image)
         return;
     }
 
-    auto imgRes = image->resolution();
+    auto imgRes = image->getResolution();
 
     if (imgRes.width <= mNewSize.width || imgRes.height <= mNewSize.height) {
         return;

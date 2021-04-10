@@ -143,10 +143,13 @@ void BitmapReader::readColorTable(std::shared_ptr<BitmapFile> &bmpFile,
 void BitmapReader::readPixelData(std::shared_ptr<BitmapFile> &bmpFile, uint32_t ifsOffset)
 {
     auto pixelSize = bmpFile->getImageSize();
+    auto res = bmpFile->getResolution();
+    auto plausibleSize = res.width * res.height;
 
-    if (pixelSize == 0) {
-        auto res = bmpFile->getResolution();
-        pixelSize = res.width * res.height;
+    // pixel size is set to 0 or not plausible?
+    if (pixelSize == 0 || plausibleSize != pixelSize) {
+        std::cerr << "Recalculating pixel size because the one in header is not plausible: " << pixelSize << std::endl;
+        pixelSize = plausibleSize;
     }
 
     auto pixelDataNumBytes = pixelSize * ceil(bmpFile->getBitDepth() / 8.0);

@@ -9,8 +9,8 @@ void KernelFilter::apply8bit(std::shared_ptr<Image> &image)
 
     Kernel kernel(mKernelType);
 
-    auto imgWidth = image->resolution().width;
-    auto imgHeight = image->resolution().height;
+    auto imgWidth = image->getResolution().width;
+    auto imgHeight = image->getResolution().height;
     auto imgCopy = image->pixelDataCopy();
 
     for (int32_t y = 0; y < imgHeight; y++) {
@@ -28,8 +28,8 @@ void KernelFilter::convolute(std::shared_ptr<Image> &image,
 {
     const auto kWidth = kernel.getSize().width;
     const auto kHeight = kernel.getSize().height;
-    const auto imgWidthMaxPos = image->resolution().width - 1;
-    const auto imgHeightMaxPos = image->resolution().height - 1;
+    const auto imgWidthMaxPos = image->getResolution().width - 1;
+    const auto imgHeightMaxPos = image->getResolution().height - 1;
 
     // calculate absolute coordinate of kernel to the pos of the image,
     // and find the absolute top left.
@@ -43,7 +43,7 @@ void KernelFilter::convolute(std::shared_ptr<Image> &image,
         for (int32_t x = absPosTopLeft.x; x < absPosTopLeft.x + kWidth; x++) {
             int xClamped = std::clamp(x, 0, imgWidthMaxPos);
             int yClamped = std::clamp(y, 0, imgHeightMaxPos);
-            auto p2 = coordToIndex8bit({xClamped, yClamped}, image->resolution());
+            auto p2 = coordToIndex8bit({xClamped, yClamped}, image->getResolution());
             auto pixel = imageCopy->at(p2);
             auto w = kernel.at({x - absPosTopLeft.x, y - absPosTopLeft.y});
             sum = sum + (pixel * w);
