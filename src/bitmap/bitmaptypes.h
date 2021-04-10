@@ -41,9 +41,9 @@ struct BitmapInfoHeader
 // https://github.com/tpn/winsdk-7/blob/master/v7.1A/Include/WinGDI.h
 struct CieXyz
 {
-    int32_t ciexyzX;
-    int32_t ciexyzY;
-    int32_t ciexyzZ;
+    int32_t ciexyzX = 0;
+    int32_t ciexyzY = 0;
+    int32_t ciexyzZ = 0;
 } __attribute__((packed));
 
 // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-ciexyztriple
@@ -57,30 +57,30 @@ struct CieXyzTriple
 // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header
 struct BitmapV5Header
 {
-    uint32_t bV5Size;
-    int32_t bV5Width;
-    int32_t bV5Height;
-    uint16_t bV5Planes;
-    uint16_t bV5BitCount;
-    uint32_t bV5Compression;
-    uint32_t bV5SizeImage;
-    int32_t bV5XPelsPerMeter;
-    int32_t bV5YPelsPerMeter;
-    uint32_t bV5ClrUsed;
-    uint32_t bV5ClrImportant;
-    uint32_t bV5RedMask;
-    uint32_t bV5GreenMask;
-    uint32_t bV5BlueMask;
-    uint32_t bV5AlphaMask;
-    uint32_t bV5CSType;
+    uint32_t bV5Size = 124;
+    int32_t bV5Width = 0;
+    int32_t bV5Height = 0;
+    uint16_t bV5Planes = 1;
+    uint16_t bV5BitCount = 0;
+    uint32_t bV5Compression = 0;
+    uint32_t bV5SizeImage = 0;
+    int32_t bV5XPelsPerMeter = 0;
+    int32_t bV5YPelsPerMeter = 0;
+    uint32_t bV5ClrUsed = 0;
+    uint32_t bV5ClrImportant = 0;
+    uint32_t bV5RedMask = 0;
+    uint32_t bV5GreenMask = 0;
+    uint32_t bV5BlueMask = 0;
+    uint32_t bV5AlphaMask = 0;
+    uint32_t bV5CSType = 0;
     CieXyzTriple bV5Endpoints;
-    uint32_t bV5GammaRed;
-    uint32_t bV5GammaGreen;
-    uint32_t bV5GammaBlue;
-    uint32_t bV5Intent;
-    uint32_t bV5ProfileData;
-    uint32_t bV5ProfileSize;
-    uint32_t bV5Reserved;
+    uint32_t bV5GammaRed = 0;
+    uint32_t bV5GammaGreen = 0;
+    uint32_t bV5GammaBlue = 0;
+    uint32_t bV5Intent = 0;
+    uint32_t bV5ProfileData = 0;
+    uint32_t bV5ProfileSize = 0;
+    uint32_t bV5Reserved = 0;
 } __attribute__((packed));
 
 // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-rgbquad
