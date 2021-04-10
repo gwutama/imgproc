@@ -14,7 +14,7 @@ std::shared_ptr<BitmapFile> BitmapFile::fromFile(const std::string &filePath)
 
 BitmapFile::BitmapFile(const std::string &filePath)
     :
-    mFileName(filePath)
+    mSourceFileName(filePath)
 {
 }
 
@@ -57,51 +57,9 @@ BitmapVersion BitmapFile::getVersion() const
     return mVersion;
 }
 
-const std::string &BitmapFile::getFileName() const
+const std::string &BitmapFile::getSourceFileName() const
 {
-    return mFileName;
-}
-
-const std::shared_ptr<RgbQuadArray> &BitmapFile::getColorTable() const
-{
-    return mColorTable;
-}
-
-void BitmapFile::setColorTable(const std::shared_ptr<RgbQuadArray> &colorTable)
-{
-    if (mVersion == BitmapVersion::Old) {
-        mInfoHeader->biClrUsed = colorTable->size();
-    }
-    else if (mVersion == BitmapVersion::V5) {
-        mV5Header->bV5ClrUsed = colorTable->size();
-    }
-    else {
-        std::cerr << "Unknown bitmap version" << std::endl;
-        return;
-    }
-
-    mColorTable = colorTable;
-}
-
-const std::shared_ptr<ByteArray> &BitmapFile::getPixelData() const
-{
-    return mPixelData;
-}
-
-void BitmapFile::setPixelData(const std::shared_ptr<ByteArray> &pixelData)
-{
-    if (mVersion == BitmapVersion::Old) {
-        mInfoHeader->biSizeImage = pixelData->size();
-    }
-    else if (mVersion == BitmapVersion::V5) {
-        mV5Header->bV5SizeImage = pixelData->size();
-    }
-    else {
-        std::cerr << "Unknown bitmap version" << std::endl;
-        return;
-    }
-
-    mPixelData = pixelData;
+    return mSourceFileName;
 }
 
 void BitmapFile::setResolution(Size size)
@@ -109,10 +67,12 @@ void BitmapFile::setResolution(Size size)
     if (mVersion == BitmapVersion::Old) {
         mInfoHeader->biWidth = size.width;
         mInfoHeader->biHeight = size.height;
+        mInfoHeader->biSizeImage = size.width * size.height;
     }
     else if (mVersion == BitmapVersion::V5) {
         mV5Header->bV5Width = size.width;
         mV5Header->bV5Height = size.height;
+        mV5Header->bV5SizeImage = size.width * size.height;
     }
     else {
         std::cerr << "Unknown bitmap version" << std::endl;
@@ -187,6 +147,76 @@ void BitmapFile::setBitDepth(uint8_t bitDepth)
     }
 }
 
+uint32_t BitmapFile::getColorTableSize()
+{
+    if (mVersion == BitmapVersion::Old) {
+        return mInfoHeader->biClrUsed;
+    }
+    else if (mVersion == BitmapVersion::V5) {
+        return mV5Header->bV5ClrUsed;
+    }
+    else {
+        std::cerr << "Unknown bitmap version" << std::endl;
+        return 0;
+    }
+}
+
+uint32_t BitmapFile::getImageSize()
+{
+    if (mVersion == BitmapVersion::Old) {
+        return mInfoHeader->biSizeImage;
+    }
+    else if (mVersion == BitmapVersion::V5) {
+        return mV5Header->bV5SizeImage;
+    }
+    else {
+        std::cerr << "Unknown bitmap version" << std::endl;
+        return 0;
+    }
+}
+
+const std::shared_ptr<RgbQuadArray> &BitmapFile::getColorTable() const
+{
+    return mColorTable;
+}
+
+void BitmapFile::setColorTable(const std::shared_ptr<RgbQuadArray> &colorTable)
+{
+    if (mVersion == BitmapVersion::Old) {
+        mInfoHeader->biClrUsed = colorTable->size();
+    }
+    else if (mVersion == BitmapVersion::V5) {
+        mV5Header->bV5ClrUsed = colorTable->size();
+    }
+    else {
+        std::cerr << "Unknown bitmap version" << std::endl;
+        return;
+    }
+
+    mColorTable = colorTable;
+}
+
+const std::shared_ptr<ByteArray> &BitmapFile::getPixelData() const
+{
+    return mPixelData;
+}
+
+void BitmapFile::setPixelData(const std::shared_ptr<ByteArray> &pixelData)
+{
+    if (mVersion == BitmapVersion::Old) {
+        mInfoHeader->biSizeImage = pixelData->size();
+    }
+    else if (mVersion == BitmapVersion::V5) {
+        mV5Header->bV5SizeImage = pixelData->size();
+    }
+    else {
+        std::cerr << "Unknown bitmap version" << std::endl;
+        return;
+    }
+
+    mPixelData = pixelData;
+}
+
 const std::shared_ptr<BitmapFileHeader> &BitmapFile::getFileHeader() const
 {
     return mFileHeader;
@@ -197,14 +227,19 @@ const std::shared_ptr<BitmapInfoHeader> &BitmapFile::getInfoHeader() const
     return mInfoHeader;
 }
 
+const std::shared_ptr<BitmapV5Header> &BitmapFile::getV5Header() const
+{
+    return mV5Header;
+}
+
 bool BitmapFile::write()
 {
-    if (mFileName.empty()) {
+    if (mSourceFileName.empty()) {
         std::cerr << "File name is empty" << std::endl;
         return false;
     }
 
-    return write(mFileName);
+    return write(mSourceFileName);
 }
 
 bool BitmapFile::write(const std::string &path)

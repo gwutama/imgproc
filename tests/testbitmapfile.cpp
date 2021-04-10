@@ -28,7 +28,7 @@ TEST(TestBitmapFile, read_fruits)
     system("cp /tmp/out.bmp ../results/testbitmapfile-read_fruits.bmp");
 }
 
-TEST(TestBitmapFile, DISABLED_read_multfont)
+TEST(TestBitmapFile, read_multfont)
 {
     auto bitmap = BitmapFile::fromFile("../../tests/images/multfont.bmp");
     bitmap->write("/tmp/out.bmp");

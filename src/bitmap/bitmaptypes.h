@@ -41,9 +41,9 @@ struct BitmapInfoHeader
 // https://github.com/tpn/winsdk-7/blob/master/v7.1A/Include/WinGDI.h
 struct CieXyz
 {
-    long ciexyzX;
-    long ciexyzY;
-    long ciexyzZ;
+    int32_t ciexyzX;
+    int32_t ciexyzY;
+    int32_t ciexyzZ;
 } __attribute__((packed));
 
 // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-ciexyztriple

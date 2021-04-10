@@ -98,7 +98,7 @@ bool Image::write()
         return false;
     }
 
-    if (mBitmapFile->getFileName().empty()) {
+    if (mBitmapFile->getSourceFileName().empty()) {
         return false;
     }
 

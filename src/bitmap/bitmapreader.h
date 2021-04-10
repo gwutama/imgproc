@@ -15,12 +15,14 @@ private:
     uint32_t readHeaderSize();
 
     std::shared_ptr<BitmapFile> readOldFormat();
-    void readFileHeader(std::shared_ptr<BitmapFile>& bmpFile);
     void readOldInfoHeader(std::shared_ptr<BitmapFile>& bmpFile);
-    void readOldColorTable(std::shared_ptr<BitmapFile>& bmpFile);
-    void readOldPixelData(std::shared_ptr<BitmapFile>& bmpFile);
 
     std::shared_ptr<BitmapFile> readV5Format();
+    void readV5Header(std::shared_ptr<BitmapFile>& bmpFile);
+
+    void readFileHeader(std::shared_ptr<BitmapFile>& bmpFile);
+    void readColorTable(std::shared_ptr<BitmapFile>& bmpFile, uint32_t ifsOffset);
+    void readPixelData(std::shared_ptr<BitmapFile>& bmpFile, uint32_t ifsOffset);
 
     uint32_t calculateColorTableNumBytes(uint8_t bitDepth, uint32_t colorTableSize);
     void readBytes(char* dest, uint32_t offset, uint32_t size);

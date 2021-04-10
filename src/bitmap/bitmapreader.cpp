@@ -59,10 +59,53 @@ std::shared_ptr<BitmapFile> BitmapReader::readOldFormat()
 
     readFileHeader(bmpFile);
     readOldInfoHeader(bmpFile);
-    readOldColorTable(bmpFile);
-    readOldPixelData(bmpFile);
+
+    auto colorTableOffset = BITMAP_FILEHEADER_SIZE + BITMAP_INFOHEADER_SIZE;
+    readColorTable(bmpFile, colorTableOffset);
+
+    auto colorTableSize = bmpFile->getColorTableSize();
+    auto colorTableNumBytes = calculateColorTableNumBytes(bmpFile->getBitDepth(), colorTableSize);
+    uint32_t pixelDataOffset = colorTableOffset + colorTableNumBytes;
+    readPixelData(bmpFile, pixelDataOffset);
 
     return bmpFile;
+}
+
+void BitmapReader::readOldInfoHeader(std::shared_ptr<BitmapFile> &bmpFile)
+{
+    uint32_t ifsOffset = BITMAP_FILEHEADER_SIZE;
+    char bitmapInfoHeader[BITMAP_INFOHEADER_SIZE];
+    readBytes(bitmapInfoHeader, ifsOffset, BITMAP_INFOHEADER_SIZE);
+    auto infoHeaderRef = bmpFile->getInfoHeader();
+    memcpy(infoHeaderRef.get(), bitmapInfoHeader, BITMAP_INFOHEADER_SIZE);
+}
+
+std::shared_ptr<BitmapFile> BitmapReader::readV5Format()
+{
+    auto bmpFile = std::shared_ptr<BitmapFile>(new BitmapFile(mFilePath));
+    bmpFile->setVersion(BitmapVersion::V5);
+
+    readFileHeader(bmpFile);
+    readV5Header(bmpFile);
+
+    auto colorTableOffset = BITMAP_FILEHEADER_SIZE + BITMAP_V5HEADER_SIZE;
+    readColorTable(bmpFile, colorTableOffset);
+
+    auto colorTableSize = bmpFile->getColorTableSize();
+    auto colorTableNumBytes = calculateColorTableNumBytes(bmpFile->getBitDepth(), colorTableSize);
+    uint32_t pixelDataOffset = colorTableOffset + colorTableNumBytes;
+    readPixelData(bmpFile, pixelDataOffset);
+
+    return bmpFile;
+}
+
+void BitmapReader::readV5Header(std::shared_ptr<BitmapFile> &bmpFile)
+{
+    uint32_t ifsOffset = BITMAP_FILEHEADER_SIZE;
+    char buffer[BITMAP_V5HEADER_SIZE];
+    readBytes(buffer, ifsOffset, BITMAP_V5HEADER_SIZE);
+    auto v5HeaderRef = bmpFile->getV5Header();
+    memcpy(v5HeaderRef.get(), buffer, BITMAP_INFOHEADER_SIZE);
 }
 
 void BitmapReader::readFileHeader(std::shared_ptr<BitmapFile> &bmpFile)
@@ -75,27 +118,16 @@ void BitmapReader::readFileHeader(std::shared_ptr<BitmapFile> &bmpFile)
     memcpy(&fileHeaderRef.get()->bfType, bitmapFileHeader, BITMAP_FILEHEADER_SIZE);
 }
 
-void BitmapReader::readOldInfoHeader(std::shared_ptr<BitmapFile> &bmpFile)
-{
-    // read bitmap info header
-    uint32_t ifsOffset = BITMAP_FILEHEADER_SIZE;
-    char bitmapInfoHeader[BITMAP_INFOHEADER_SIZE];
-    readBytes(bitmapInfoHeader, ifsOffset, BITMAP_INFOHEADER_SIZE);
-    auto infoHeaderRef = bmpFile->getInfoHeader();
-    memcpy(infoHeaderRef.get(), bitmapInfoHeader, BITMAP_INFOHEADER_SIZE);
-}
-
-void BitmapReader::readOldColorTable(std::shared_ptr<BitmapFile> &bmpFile)
+void BitmapReader::readColorTable(std::shared_ptr<BitmapFile> &bmpFile,
+                                  uint32_t ifsOffset)
 {
     // Color table is irrelevant for images with bit depths > 8
     // and is usually set to 0 for images with bit depths > 8
-    uint32_t ifsOffset = BITMAP_FILEHEADER_SIZE + BITMAP_INFOHEADER_SIZE;
-
-    auto infoHeaderRef = bmpFile->getInfoHeader();
-    auto colorTableSize = infoHeaderRef->biClrUsed;
+    auto colorTableSize = bmpFile->getColorTableSize();
     auto colorTable = bmpFile->getColorTable();
     auto colorTableNumBytes = calculateColorTableNumBytes(bmpFile->getBitDepth(), colorTableSize);
-    colorTable->reserve(colorTableNumBytes);
+
+    colorTable->clear();
 
     for (int i = 0; i < colorTableNumBytes; i = i + 4) {
         char buffer[BITMAP_RGBQUAD_SIZE];
@@ -108,22 +140,17 @@ void BitmapReader::readOldColorTable(std::shared_ptr<BitmapFile> &bmpFile)
     }
 }
 
-void BitmapReader::readOldPixelData(std::shared_ptr<BitmapFile> &bmpFile)
+void BitmapReader::readPixelData(std::shared_ptr<BitmapFile> &bmpFile, uint32_t ifsOffset)
 {
-    auto infoHeaderRef = bmpFile->getInfoHeader();
-    auto pixelSize = infoHeaderRef->biSizeImage;
+    auto pixelSize = bmpFile->getImageSize();
 
     if (pixelSize == 0) {
-        pixelSize = infoHeaderRef->biWidth * infoHeaderRef->biHeight;
+        auto res = bmpFile->getResolution();
+        pixelSize = res.width * res.height;
     }
 
-    auto pixelDataNumBytes = pixelSize * (bmpFile->getBitDepth() / 8);
+    auto pixelDataNumBytes = pixelSize * ceil(bmpFile->getBitDepth() / 8.0);
     auto pixelDataRef = bmpFile->getPixelData();
-    pixelDataRef->reserve(pixelDataNumBytes);
-
-    auto colorTableSize = infoHeaderRef->biClrUsed;
-    auto colorTableNumBytes = calculateColorTableNumBytes(bmpFile->getBitDepth(), colorTableSize);
-    uint32_t ifsOffset = BITMAP_FILEHEADER_SIZE + BITMAP_INFOHEADER_SIZE + colorTableNumBytes;
 
     mIfs.seekg(ifsOffset, mIfs.beg);
 
@@ -132,11 +159,6 @@ void BitmapReader::readOldPixelData(std::shared_ptr<BitmapFile> &bmpFile)
         auto b = static_cast<uint8_t>(c);
         pixelDataRef->push_back(b);
     }
-}
-
-std::shared_ptr<BitmapFile> BitmapReader::readV5Format()
-{
-    return {};
 }
 
 uint32_t BitmapReader::calculateColorTableNumBytes(uint8_t bitDepth,

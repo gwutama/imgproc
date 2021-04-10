@@ -19,7 +19,7 @@ bool BitmapWriter::write(const std::string &filePath)
         return false;
     }
 
-    mOfs = std::ofstream(filePath, std::ifstream::out | std::ifstream::binary);
+    mOfs = std::ofstream(filePath, std::ofstream::out | std::ofstream::binary);
 
     if (!mOfs) {
         std::cerr << "Unable to write file: " << filePath << std::endl;
@@ -62,7 +62,9 @@ void BitmapWriter::writeOldInfoHeader()
 
 void BitmapWriter::writeV5InfoHeader()
 {
-
+    char buffer[BITMAP_V5HEADER_SIZE];
+    memcpy(buffer, mBmpFile->getV5Header().get(), BITMAP_V5HEADER_SIZE);
+    mOfs.write(buffer, BITMAP_V5HEADER_SIZE);
 }
 
 void BitmapWriter::writeColorTable()
@@ -97,7 +99,9 @@ void BitmapWriter::writePixelData()
 
 uint32_t BitmapWriter::calculateBitmapFileSize()
 {
-    uint32_t pixelDataSize = mBmpFile->getPixelData()->size() / (mBmpFile->getBitDepth() / 8);
+    auto pxs = mBmpFile->getPixelData()->size();
+    auto div = ceil(mBmpFile->getBitDepth() / 8.0);
+    uint32_t pixelDataSize = pxs / div;
     uint32_t size = calculateBitmapDataOffset() + pixelDataSize;
     return size;
 }
@@ -105,6 +109,15 @@ uint32_t BitmapWriter::calculateBitmapFileSize()
 uint32_t BitmapWriter::calculateBitmapDataOffset()
 {
     uint32_t colorTableSize = mBmpFile->getColorTable()->size() * BITMAP_RGBQUAD_SIZE;
-    uint32_t size = BITMAP_FILEHEADER_SIZE + BITMAP_INFOHEADER_SIZE + colorTableSize;
+
+    uint32_t size = 0;
+
+    if (mBmpFile->getVersion() == BitmapVersion::Old) {
+        size = BITMAP_FILEHEADER_SIZE + BITMAP_INFOHEADER_SIZE + colorTableSize;
+    }
+    else if (mBmpFile->getVersion() == BitmapVersion::V5) {
+        size = BITMAP_FILEHEADER_SIZE + BITMAP_V5HEADER_SIZE + colorTableSize;
+    }
+
     return size;
 }
