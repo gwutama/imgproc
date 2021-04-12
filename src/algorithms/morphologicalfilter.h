@@ -9,7 +9,8 @@ public:
         Invalid = 0,
         Maximum, // dilation
         Minimum, // erosion
-        Mean
+        Mean,
+        Median
     };
 
     void apply8bit(std::shared_ptr<Image> &image) override;
@@ -28,6 +29,7 @@ private:
     void maximum8bit(std::shared_ptr<Image>& image);
     void minimum8bit(std::shared_ptr<Image>& image);
     void mean8bit(std::shared_ptr<Image>& image);
+    void median8bit(std::shared_ptr<Image>& image);
 
 private:
     Filter mFilter = Filter::Invalid;
