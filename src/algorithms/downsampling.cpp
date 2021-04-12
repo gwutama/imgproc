@@ -27,8 +27,8 @@ void Downsampling::apply8bit(std::shared_ptr<Image> &image)
             auto yOrigImage = static_cast<int32_t>(round(imgHeightRatio * y));
             auto sum = 0;
 
-            for (int i = 0; i < maskHeight; i++) {
-                for (int j = 0; j < maskWidth; j++) {
+            for (int32_t i = 0; i < maskHeight; i++) {
+                for (int32_t j = 0; j < maskWidth; j++) {
                     auto xClamp = std::clamp(xOrigImage + j, 0, imgRes.width - 1);
                     auto yClamp = std::clamp(yOrigImage + i, 0, imgRes.height - 1);
                     sum = sum + *(image->pixel8bit({xClamp, yClamp}));

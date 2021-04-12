@@ -143,10 +143,10 @@ TEST(TestMorphologicalFilter, 003_SCANNED_GRAY_GT_bmp_min)
            "../results/testmorphologicalfilter-003_SCANNED_GRAY_GT_bmp-min.png");
 }
 
-TEST(TestMorphologicalFilter, lena_bmp_avg)
+TEST(TestMorphologicalFilter, lena_bmp_mean)
 {
     auto morph = std::shared_ptr<MorphologicalFilter>(new MorphologicalFilter);
-    morph->setFilter(MorphologicalFilter::Filter::Average);
+    morph->setFilter(MorphologicalFilter::Filter::Mean);
     morph->setRadius(1);
 
     auto image = Image::fromFile("../../tests/images/lena.bmp");
@@ -157,13 +157,13 @@ TEST(TestMorphologicalFilter, lena_bmp_avg)
     system("convert "
            "-resize 500x500 "
            "../../tests/images/lena.bmp /tmp/out.bmp +append "
-           "../results/testmorphologicalfilter-lena_bmp-avg.png");
+           "../results/testmorphologicalfilter-lena_bmp-mean.png");
 }
 
-TEST(TestMorphologicalFilter, cameraman_bmp_avg)
+TEST(TestMorphologicalFilter, cameraman_bmp_mean)
 {
     auto morph = std::shared_ptr<MorphologicalFilter>(new MorphologicalFilter);
-    morph->setFilter(MorphologicalFilter::Filter::Average);
+    morph->setFilter(MorphologicalFilter::Filter::Mean);
     morph->setRadius(1);
 
     auto image = Image::fromFile("../../tests/images/cameraman.bmp");
@@ -174,7 +174,7 @@ TEST(TestMorphologicalFilter, cameraman_bmp_avg)
     system("convert "
            "-resize 500x500 "
            "../../tests/images/cameraman.bmp /tmp/out.bmp +append "
-           "../results/testmorphologicalfilter-cameraman_bmp-avg.png");
+           "../results/testmorphologicalfilter-cameraman_bmp-mean.png");
 }
 
 int main(int argc, char **argv)

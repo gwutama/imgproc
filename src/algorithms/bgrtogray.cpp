@@ -7,7 +7,7 @@ void BgrToGray::apply24bit(std::shared_ptr<Image> &image)
     auto numPixelsRgb = pixelData->size();
     auto newPixelData = std::shared_ptr<ByteArray>(new ByteArray);
 
-    for (uint64_t i = 0; i < numPixelsRgb; i = i + 3) {
+    for (int32_t i = 0; i < numPixelsRgb; i = i + 3) {
         auto b = pixelData->at(i);
         auto g = pixelData->at(i + 1);
         auto r = pixelData->at(i + 2);

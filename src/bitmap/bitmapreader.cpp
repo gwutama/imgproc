@@ -144,12 +144,13 @@ void BitmapReader::readPixelData(std::shared_ptr<BitmapFile> &bmpFile, uint32_t 
 {
     auto pixelDataNumBytes = bmpFile->getImageSize();
     auto res = bmpFile->getResolution();
-    auto plausibleSize = res.width * res.height;
 
     if (pixelDataNumBytes == 0) {
+        auto plausibleSize = res.width * res.height;
+        pixelDataNumBytes = plausibleSize;
+
         std::cerr << "Recalculating pixel size because the one in header is not plausible: " << pixelDataNumBytes
                   << ". Pixel size is not set to " << plausibleSize << std::endl;
-        pixelDataNumBytes = plausibleSize;
     }
 
     auto pixelDataRef = bmpFile->getPixelData();

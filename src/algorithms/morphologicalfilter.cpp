@@ -9,8 +9,8 @@ void MorphologicalFilter::apply8bit(std::shared_ptr<Image> &image)
     else if (mFilter == Filter::Minimum) {
         minimum8bit(image);
     }
-    else if (mFilter == Filter::Average) {
-        average8bit(image);
+    else if (mFilter == Filter::Mean) {
+        mean8bit(image);
     }
 }
 
@@ -25,8 +25,8 @@ void MorphologicalFilter::maximum8bit(std::shared_ptr<Image> &image)
             uint8_t newVal = 0;
             uint8_t* pixel = nullptr;
 
-            for (int i = -mRadius; i <= mRadius; i++) {
-                for (int j = -mRadius; j <= mRadius; j++) {
+            for (int32_t i = -mRadius; i <= mRadius; i++) {
+                for (int32_t j = -mRadius; j <= mRadius; j++) {
                     pixel = image->pixel8bit({x + j, y + i});
                     if (pixel != nullptr && *(pixel) > newVal) {
                         newVal = *(pixel);
@@ -52,8 +52,8 @@ void MorphologicalFilter::minimum8bit(std::shared_ptr<Image> &image)
             uint8_t newVal = 255;
             uint8_t* pixel = nullptr;
 
-            for (int i = -mRadius; i <= mRadius; i++) {
-                for (int j = -mRadius; j <= mRadius; j++) {
+            for (int32_t i = -mRadius; i <= mRadius; i++) {
+                for (int32_t j = -mRadius; j <= mRadius; j++) {
                     pixel = image->pixel8bit({x + j, y + i});
                     if (pixel != nullptr && *(pixel) < newVal) {
                         newVal = *(pixel);
@@ -68,7 +68,7 @@ void MorphologicalFilter::minimum8bit(std::shared_ptr<Image> &image)
     image->setPixelData(newPixelData);
 }
 
-void MorphologicalFilter::average8bit(std::shared_ptr<Image> &image)
+void MorphologicalFilter::mean8bit(std::shared_ptr<Image> &image)
 {
     const auto imgWidth = image->getResolution().width;
     const auto imgHeight = image->getResolution().height;
@@ -80,8 +80,8 @@ void MorphologicalFilter::average8bit(std::shared_ptr<Image> &image)
             uint8_t* pixel = nullptr;
             uint8_t div = 0;
 
-            for (int i = -mRadius; i <= mRadius; i++) {
-                for (int j = -mRadius; j <= mRadius; j++) {
+            for (int32_t i = -mRadius; i <= mRadius; i++) {
+                for (int32_t j = -mRadius; j <= mRadius; j++) {
                     pixel = image->pixel8bit({x + j, y + i});
                     if (pixel != nullptr) {
                         newVal = newVal + *(pixel);
