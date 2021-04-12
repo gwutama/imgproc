@@ -16,7 +16,7 @@ TEST(TestHistogram, man_bmp)
     system("gnuplot -e "
            "\"set terminal png; "
            "set output '/tmp/out.png'; "
-           "plot '/tmp/out.dat' with impulse;\"");
+           "plot8bit '/tmp/out.dat' with impulse;\"");
 
     system("mkdir -p ../results/");
     system("convert "
@@ -40,7 +40,7 @@ TEST(TestHistogram, 003_SCANNED_GRAY_GT_bmp)
     system("gnuplot -e "
            "\"set terminal png; "
            "set output '/tmp/out.png'; "
-           "plot '/tmp/out.dat' with impulse;\"");
+           "plot8bit '/tmp/out.dat' with impulse;\"");
 
     system("mkdir -p ../results/");
     system("convert "

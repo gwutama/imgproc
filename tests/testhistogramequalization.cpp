@@ -25,8 +25,8 @@ TEST(TestHistogramEqualization, man_bmp)
            "\"set terminal png; "
            "set output '/tmp/out.png'; "
            "set multiplot layout 2,1; "
-           "plot '/tmp/out_orig.dat' with impulse; "
-           "plot '/tmp/out_mod.dat' with impulse; "
+           "plot8bit '/tmp/out_orig.dat' with impulse; "
+           "plot8bit '/tmp/out_mod.dat' with impulse; "
            "unset multiplot\"");
 
     system("mkdir -p ../results/");
@@ -57,8 +57,8 @@ TEST(TestHistogramEqualization, girlface_bmp)
            "\"set terminal png; "
            "set output '/tmp/out.png'; "
            "set multiplot layout 2,1; "
-           "plot '/tmp/out_orig.dat' with impulse; "
-           "plot '/tmp/out_mod.dat' with impulse; "
+           "plot8bit '/tmp/out_orig.dat' with impulse; "
+           "plot8bit '/tmp/out_mod.dat' with impulse; "
            "unset multiplot\"");
 
     system("mkdir -p ../results/");
@@ -89,8 +89,8 @@ TEST(TestHistogramEqualization, lena_bmp)
            "\"set terminal png; "
            "set output '/tmp/out.png'; "
            "set multiplot layout 2,1; "
-           "plot '/tmp/out_orig.dat' with impulse; "
-           "plot '/tmp/out_mod.dat' with impulse; "
+           "plot8bit '/tmp/out_orig.dat' with impulse; "
+           "plot8bit '/tmp/out_mod.dat' with impulse; "
            "unset multiplot\"");
 
     system("mkdir -p ../results/");
@@ -123,8 +123,8 @@ TEST(TestHistogramEqualization, 003_SCANNED_GRAY_GT_bmp)
            "\"set terminal png; "
            "set output '/tmp/out.png'; "
            "set multiplot layout 2,1; "
-           "plot '/tmp/out_orig.dat' with impulse; "
-           "plot '/tmp/out_mod.dat' with impulse; "
+           "plot8bit '/tmp/out_orig.dat' with impulse; "
+           "plot8bit '/tmp/out_mod.dat' with impulse; "
            "unset multiplot\"");
 
     system("mkdir -p ../results/");

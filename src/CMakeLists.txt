@@ -21,6 +21,7 @@ set(SOURCE_FILES
         algorithms/noise.cpp
         algorithms/bgrtogray.cpp
         algorithms/morphologicalfilter.cpp
+        algorithms/drawline.cpp
 )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

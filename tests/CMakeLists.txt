@@ -48,3 +48,7 @@ gtest_discover_tests(testbgrtogray)
 add_executable(testmorphologicalfilter testmorphologicalfilter.cpp)
 target_link_libraries(testmorphologicalfilter gtest imgproc)
 gtest_discover_tests(testmorphologicalfilter)
+
+add_executable(testdrawline testdrawline.cpp)
+target_link_libraries(testdrawline gtest imgproc)
+gtest_discover_tests(testdrawline)
