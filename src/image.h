@@ -12,7 +12,8 @@ public:
     static std::shared_ptr<Image> fromFile(const std::string &path);
 
     explicit Image(std::shared_ptr<BitmapFile> bitmapFile);
-    Image(Size size, uint8_t bitDepth, uint8_t fill = 0);
+    Image(Size size, uint8_t bitDepth, uint8_t fill);
+    Image(Size size, Rgb fill);
 
     uint8_t getBitDepth();
     void setBitDepth(uint8_t bitDepth);
@@ -25,6 +26,9 @@ public:
     // 8bit / 1bit images only
     uint8_t *pixel8bit(const Coordinate &coord);
     bool setPixel(const Coordinate &coord, uint8_t value);
+
+    // 24bit images
+    bool setPixel(const Coordinate &coord, Rgb value);
 
     void applyAlgorithm(std::shared_ptr<Algorithm> algorithm);
 

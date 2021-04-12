@@ -152,3 +152,10 @@ Kernel::Kernel(Mask mask)
         mSize = Size{3, 3};
     }
 }
+
+const double &Kernel::at(Coordinate coord) const
+{
+    auto const maxIndex = mSize.width * mSize.height - 1;
+    auto pos = std::clamp<uint32_t>(coord.y * mSize.width + coord.x, 0, maxIndex);
+    return mKernel->at(pos);
+}

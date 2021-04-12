@@ -105,3 +105,8 @@ const uint32_t BITMAP_FILEHEADER_SIZE = sizeof(BitmapFileHeader);
 const uint32_t BITMAP_INFOHEADER_SIZE = sizeof(BitmapInfoHeader);
 const uint32_t BITMAP_V5HEADER_SIZE = sizeof(BitmapV5Header);
 const uint32_t BITMAP_RGBQUAD_SIZE = sizeof(BitmapRgbQuad);
+
+uint32_t coordToIndex8bit(Coordinate coord, Size resolution);
+uint32_t coordToIndex24bit(Coordinate coord, Size resolution, uint8_t bitDepth);
+uint32_t calculateStride(uint32_t width, uint8_t bitCount);
+

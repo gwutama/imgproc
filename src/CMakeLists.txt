@@ -1,5 +1,4 @@
 set(HEADER_FILES
-        bitmap/bitmaptypes.h
         algorithms/algorithm.h
 )
 
@@ -9,6 +8,7 @@ set(SOURCE_FILES
         bitmap/bitmapfile.cpp
         bitmap/bitmapreader.cpp
         bitmap/bitmapwriter.cpp
+        bitmap/bitmapcommon.cpp
         algorithms/binarize.cpp
         algorithms/histogram.cpp
         algorithms/histogramequalization.cpp

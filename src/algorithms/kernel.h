@@ -44,11 +44,7 @@ public:
         return mSize;
     }
 
-    const double &at(Coordinate coord) const
-    {
-        auto pos = coordToIndex8bit(coord, mSize);
-        return mKernel->at(pos);
-    }
+    const double &at(Coordinate coord) const;
 
 private:
     std::shared_ptr<std::vector<double>> mKernel;

@@ -32,7 +32,4 @@ struct Coordinate
 };
 
 typedef std::vector<uint8_t> ByteArray;
-
-uint32_t coordToIndex8bit(Coordinate coord, Size resolution);
-uint32_t coordToIndex24bit(Coordinate coord, Size resolution);
 double degreeToRadian(double degree);

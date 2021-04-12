@@ -34,7 +34,7 @@ BitmapFile::BitmapFile(Size size, uint8_t bitDepth, uint8_t fill)
 
     // if width is odd, we need to add padding (stride)
     if (size.width % 2) {
-        stride = calculateStride();
+        stride = calculateStride(size.width, bitDepth);
     }
 
     auto pixelDataSize = stride * size.height * (bitDepth / 8);
@@ -42,6 +42,41 @@ BitmapFile::BitmapFile(Size size, uint8_t bitDepth, uint8_t fill)
 
     for (int i = 0; i < pixelDataSize; i++) {
         pixelData->push_back(fill);
+    }
+
+    setPixelData(pixelData);
+}
+
+BitmapFile::BitmapFile(Size size, Rgb fill)
+{
+    uint8_t bitDepth = 24;
+
+    setVersion(BitmapVersion::Old);
+    setBitDepth(bitDepth);
+    setResolution(size);
+
+    // reserve pixel data
+    auto pixelDataSize = 0;
+    auto stride = 0;
+
+    // if width is odd, we need to add padding (stride)
+    if (size.width % 2) {
+        stride = calculateStride(size.width, bitDepth);
+    }
+
+    auto padding = stride - (size.width * bitDepth / 8);
+    auto pixelData = std::shared_ptr<ByteArray>(new ByteArray);
+
+    for (int y = 0; y < size.height; y++) {
+        for (int x = 0; x < size.width; x++) {
+            pixelData->push_back(fill.blue);
+            pixelData->push_back(fill.green);
+            pixelData->push_back(fill.red);
+        }
+
+        for (int p = 0; p < padding; p++) {
+            pixelData->push_back(0);
+        }
     }
 
     setPixelData(pixelData);
@@ -127,9 +162,9 @@ void BitmapFile::setBitDepth(uint8_t bitDepth)
         return;
     }
 
-    if (bitDepth <= 8) {
-        mColorTable->clear();
+    mColorTable->clear();
 
+    if (bitDepth <= 8) {
         auto colorTableSize = pow(2, getBitDepth());
 
         if (mVersion == BitmapVersion::Old) {
@@ -250,19 +285,7 @@ bool BitmapFile::write(const std::string &path)
     return isOk;
 }
 
-uint32_t BitmapFile::calculateStride(uint32_t width, uint8_t bitCount)
-{
-    auto stride = (((width * bitCount) + 31) & ~31) >> 3;
-    return stride;
-}
-
-uint32_t BitmapFile::calculateStride()
-{
-    auto stride = (((getInfoHeader()->biWidth * getBitDepth()) + 31) & ~31) >> 3;
-    return stride;
-}
-
 bool BitmapFile::isBitDepthSupported(uint8_t bitDepth)
 {
-    return (bitDepth == 1 || bitDepth == 8 || bitDepth == 24 || bitDepth == 32);
+    return (bitDepth == 1 || bitDepth == 8 || bitDepth == 24);
 }

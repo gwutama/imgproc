@@ -25,6 +25,11 @@ Image::Image(Size size, uint8_t bitDepth, uint8_t fill)
     mBitmapFile = std::shared_ptr<BitmapFile>(new BitmapFile(size, bitDepth, fill));
 }
 
+Image::Image(Size size, Rgb fill)
+{
+    mBitmapFile = std::shared_ptr<BitmapFile>(new BitmapFile(size, fill));
+}
+
 uint8_t Image::getBitDepth()
 {
     return mBitmapFile->getBitDepth();
@@ -103,6 +108,22 @@ bool Image::setPixel(const Coordinate &coord, uint8_t value)
 
     auto pos = coordToIndex8bit(coord, res);
     pixelData()->at(pos) = value;
+    return true;
+}
+
+bool Image::setPixel(const Coordinate &coord, Rgb value)
+{
+    auto res = getResolution();
+
+    // Out of bounds
+    if (coord.x >= res.width || coord.x < 0 || coord.y >= res.height || coord.y < 0) {
+        return false;
+    }
+
+    auto pos = coordToIndex24bit(coord, res, getBitDepth());
+    pixelData()->at(pos) = value.blue;
+    pixelData()->at(pos + 1) = value.green;
+    pixelData()->at(pos + 2) = value.red;
     return true;
 }
 

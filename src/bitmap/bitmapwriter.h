@@ -4,7 +4,7 @@
 #include <memory>
 #include <fstream>
 #include "bitmapfile.h"
-#include "bitmaptypes.h"
+#include "bitmapcommon.h"
 
 class BitmapWriter
 {

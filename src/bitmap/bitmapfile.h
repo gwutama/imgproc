@@ -2,7 +2,7 @@
 
 #include <string>
 #include <memory>
-#include "bitmaptypes.h"
+#include "bitmapcommon.h"
 
 /**
  * http://www.dragonwins.com/domains/getteched/bmp/bmpfileformat.htm
@@ -15,7 +15,8 @@ class BitmapFile: public std::enable_shared_from_this<BitmapFile>
 public:
     static std::shared_ptr<BitmapFile> fromFile(const std::string &filePath);
 
-    BitmapFile(Size size, uint8_t bitDepth, uint8_t fill = 0);
+    BitmapFile(Size size, uint8_t bitDepth, uint8_t fill);
+    BitmapFile(Size size, Rgb fill);
 
     const std::string &getSourceFileName() const;
     void setResolution(Size size);
@@ -43,8 +44,6 @@ private:
     const std::shared_ptr<BitmapInfoHeader> &getInfoHeader() const;
     const std::shared_ptr<BitmapV5Header> &getV5Header() const;
 
-    uint32_t calculateStride(uint32_t width, uint8_t bitCount);
-    uint32_t calculateStride();
     bool isBitDepthSupported(uint8_t bitDepth);
 
 private:
