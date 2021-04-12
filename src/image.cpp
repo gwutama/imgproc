@@ -80,9 +80,11 @@ uint8_t *Image::pixel8bit(const Coordinate &coord)
     }
 
     auto pos = coordToIndex8bit(coord, res);
+    auto pixelDataSize = pixelData()->size();
 
-    if (pos > pixelData()->size() - 1) {
-//        std::cerr << "pos=" << pos << " > pixeldata size" << std::endl;
+    if (pos > pixelDataSize - 1) {
+        std::cerr << "Calculated index out of bounds. Pos " << pos
+                  << " > pixeldata size " << pixelDataSize << std::endl;
         return nullptr;
     }
 

@@ -46,6 +46,15 @@ TEST(TestBitmapFile, read_multfont)
     system("cp /tmp/out.bmp ../results/testbitmapfile-read_multfont.bmp");
 }
 
+TEST(TestBitmapFile, read_003_SCANNED_GRAY_GT)
+{
+    auto bitmap = BitmapFile::fromFile("../../tests/images/003_SCANNED_GRAY_GT.bmp");
+    bitmap->write("/tmp/out.bmp");
+
+    system("mkdir -p ../results/");
+    system("cp /tmp/out.bmp ../results/testbitmapfile-read_003_SCANNED_GRAY_GT.bmp");
+}
+
 TEST(TestBitmapFile, black_8bit_8x2)
 {
     auto bitmap = std::shared_ptr<BitmapFile>(new BitmapFile({8, 2}, 8));

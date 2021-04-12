@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <image.h>
 #include <algorithms/morphologicalfilter.h>
+#include <algorithms/bgrtogray.h>
 
 TEST(TestMorphologicalFilter, lena_bmp_max)
 {
@@ -36,7 +37,26 @@ TEST(TestMorphologicalFilter, cameraman_bmp_max)
            "../results/testmorphologicalfilter-cameraman_bmp-max.png");
 }
 
-TEST(TestMorphologicalFilter, multfont_bmp_max)
+TEST(TestMorphologicalFilter, 003_SCANNED_GRAY_GT_bmp_max)
+{
+    auto bgr2gray = std::shared_ptr<BgrToGray>(new BgrToGray);
+    auto morph = std::shared_ptr<MorphologicalFilter>(new MorphologicalFilter);
+    morph->setFilter(MorphologicalFilter::Filter::Maximum);
+    morph->setRadius(1);
+
+    auto image = Image::fromFile("../../tests/images/003_SCANNED_GRAY_GT.bmp");
+    image->applyAlgorithm(bgr2gray);
+    image->applyAlgorithm(morph);
+    image->write("/tmp/out.bmp");
+
+    system("mkdir -p ../results/");
+    system("convert "
+           "-resize 1000x1000 "
+           "../../tests/images/003_SCANNED_GRAY_GT.bmp /tmp/out.bmp +append "
+           "../results/testmorphologicalfilter-003_SCANNED_GRAY_GT_bmp-max.png");
+}
+
+TEST(TestMorphologicalFilter, DISABLED_multfont_bmp_max)
 {
     auto morph = std::shared_ptr<MorphologicalFilter>(new MorphologicalFilter);
     morph->setFilter(MorphologicalFilter::Filter::Maximum);
@@ -87,7 +107,7 @@ TEST(TestMorphologicalFilter, cameraman_bmp_min)
            "../results/testmorphologicalfilter-cameraman_bmp-min.png");
 }
 
-TEST(TestMorphologicalFilter, multfont_bmp_min)
+TEST(TestMorphologicalFilter, DISABLED_multfont_bmp_min)
 {
     auto morph = std::shared_ptr<MorphologicalFilter>(new MorphologicalFilter);
     morph->setFilter(MorphologicalFilter::Filter::Minimum);
@@ -102,6 +122,25 @@ TEST(TestMorphologicalFilter, multfont_bmp_min)
            "-resize 500x500 "
            "../../tests/images/multfont.bmp /tmp/out.bmp +append "
            "../results/testmorphologicalfilter-multfont_bmp-min.png");
+}
+
+TEST(TestMorphologicalFilter, 003_SCANNED_GRAY_GT_bmp_min)
+{
+    auto bgr2gray = std::shared_ptr<BgrToGray>(new BgrToGray);
+    auto morph = std::shared_ptr<MorphologicalFilter>(new MorphologicalFilter);
+    morph->setFilter(MorphologicalFilter::Filter::Minimum);
+    morph->setRadius(1);
+
+    auto image = Image::fromFile("../../tests/images/003_SCANNED_GRAY_GT.bmp");
+    image->applyAlgorithm(bgr2gray);
+    image->applyAlgorithm(morph);
+    image->write("/tmp/out.bmp");
+
+    system("mkdir -p ../results/");
+    system("convert "
+           "-resize 1000x1000 "
+           "../../tests/images/003_SCANNED_GRAY_GT.bmp /tmp/out.bmp +append "
+           "../results/testmorphologicalfilter-003_SCANNED_GRAY_GT_bmp-min.png");
 }
 
 TEST(TestMorphologicalFilter, lena_bmp_avg)

@@ -44,7 +44,7 @@ uint32_t BitmapReader::readHeaderSize()
 {
     // header size is located in 14th bytes with 4 bytes length of a bitmap file
     char buffer[4] = {0};
-    readBytes(buffer, 14, sizeof (buffer));
+    readBytes(buffer, 14, sizeof(buffer));
 
     uint32_t headerSize = 0;
     memcpy(&headerSize, buffer, 4);
@@ -147,12 +147,15 @@ void BitmapReader::readPixelData(std::shared_ptr<BitmapFile> &bmpFile, uint32_t 
     auto plausibleSize = res.width * res.height;
 
     // pixel size is set to 0 or not plausible?
-    if (pixelSize == 0 || plausibleSize != pixelSize) {
-        std::cerr << "Recalculating pixel size because the one in header is not plausible: " << pixelSize << std::endl;
+    if (pixelSize == 0) {
+//    if (pixelSize == 0 || pixelSize < plausibleSize) {
+        std::cerr << "Recalculating pixel size because the one in header is not plausible: " << pixelSize
+                  << ". Pixel size is not set to " << plausibleSize << std::endl;
         pixelSize = plausibleSize;
     }
 
-    auto pixelDataNumBytes = pixelSize * ceil(bmpFile->getBitDepth() / 8.0);
+//    auto pixelDataNumBytes = pixelSize * ceil(bmpFile->getBitDepth() / 8.0);
+    auto pixelDataNumBytes = pixelSize;
     auto pixelDataRef = bmpFile->getPixelData();
 
     mIfs.seekg(ifsOffset, mIfs.beg);

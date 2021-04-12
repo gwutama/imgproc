@@ -9,8 +9,8 @@ void Histogram::apply8bit(std::shared_ptr<Image> &image)
 
     auto size = image->pixelData()->size();
 
-    for (int n = 0; n < size; n++) {
-        auto val = static_cast<uint32_t>(image->pixelData()->at(n));
+    for (uint64_t n = 0; n < size; n++) {
+        auto val = static_cast<uint8_t>(image->pixelData()->at(n));
         px.at(val) = px.at(val) + 1;
     }
 
