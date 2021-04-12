@@ -18,5 +18,4 @@ void BgrToGray::apply24bit(std::shared_ptr<Image> &image)
 
     image->setPixelData(newPixelData);
     image->setBitDepth(8);
-    image->write("/tmp/foobar.bmp");
 }
